@@ -1,0 +1,13 @@
+mutation AddMessage($message: MessageInput!, $customerId: Int) {
+  addMessage(message: $message, customerId: $customerId) {
+    __typename
+    id
+    from_customer
+    text
+    timestamp
+    createdAt
+    chat {
+      id
+    }
+  }
+}

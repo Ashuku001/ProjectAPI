@@ -1,0 +1,4 @@
+fragment merchantFragment on Merchant {
+  username
+  business_name
+}

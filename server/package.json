@@ -1,0 +1,51 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon --exec babel-node --plugins require-context-hook -L index.js"
+  },
+  "author": "Ashuku Ezra",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/sandbox": "^2.5.1",
+    "@apollo/server": "^4.9.3",
+    "@graphql-tools/schema": "^10.0.0",
+    "@graphql-tools/utils": "^10.0.6",
+    "apollo-server-core": "^3.12.1",
+    "axios": "^1.5.0",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "colors": "^1.4.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cookies": "^0.8.0",
+    "cors": "^2.8.5",
+    "diagnose-endpoint": "^1.1.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-tools": "^9.0.0",
+    "graphql-ws": "^5.14.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1",
+    "winston": "^3.10.0",
+    "ws": "^8.14.2",
+    "x-hub-signature": "^2.1.1"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.22.19",
+    "babel-plugin-require-context-hook": "^1.0.0",
+    "nodemon": "^3.0.1"
+  }
+}

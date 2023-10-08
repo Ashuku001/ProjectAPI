@@ -1,0 +1,19 @@
+subscription messageAdded($chatId: Int!) {
+  messageAdded(chatId: $chatId) {
+    message {
+      id
+      text
+      from_customer
+      timestamp
+      createdAt
+      chat {
+        id
+        __typename
+      }
+      __typename
+    }
+    chat {
+      id
+    }
+  }
+}

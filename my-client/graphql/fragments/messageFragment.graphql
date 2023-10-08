@@ -1,0 +1,6 @@
+fragment messageFragment on Message {
+  text
+  timestamp
+  from_customer
+  createdAt
+}

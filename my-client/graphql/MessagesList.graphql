@@ -1,0 +1,26 @@
+query GetMessages($chatId: Int!) {
+  chat(chatId: $chatId) {
+    id
+    # messageFeed(cursor: $cursor) @connection(key: "messageFeed") {
+    #   cursor
+    # }
+    customer {
+      id
+      first_name
+      last_name
+      phone_number
+      __typename
+    }
+    messages {
+      id
+      text
+      from_customer
+      timestamp
+      createdAt
+      chat {
+        id
+      }
+      __typename
+    }
+  }
+}

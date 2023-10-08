@@ -1,0 +1,10 @@
+subscription chatAdded($merchantId: Int){
+    chatAdded(merchantId: $merchantId){
+        id
+        messages {
+            id
+            text
+            __typename
+        }
+    }
+}

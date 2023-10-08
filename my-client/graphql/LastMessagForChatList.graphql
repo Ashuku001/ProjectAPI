@@ -1,0 +1,12 @@
+query LastMessage($chatId: Int!) {
+  lastMessage(chatId: $chatId) {
+    id
+    text
+    createdAt
+    chat {
+        id
+        __typename
+    }
+    __typename
+  }
+}
