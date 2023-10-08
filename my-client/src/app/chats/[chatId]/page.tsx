@@ -46,7 +46,7 @@ function ChatPage({ params: { chatId } }: Props) {
                     }
 
                     const newMessage = subscriptionData.data.messageAdded?.message
-                    // console.log("NEW MESSAGE IN PAGE", newMessage)
+                    console.log("NEW MESSAGE IN PAGE", newMessage)
 
                     if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
                         return Object.assign({}, prev, {

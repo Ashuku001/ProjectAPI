@@ -16,76 +16,55 @@ function TextInput({ chatId, customerId }: Props) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        let variables
-        if (customerId && customerId !== undefined) {
-            variables = {
-                "message": {
-                    "text": textInput,
-                    "chatId": chatId,
-                    "from_customer": false,
-                },
-                "customerId": customerId
-            };
-        } else {
-            variables = {
-                "message": {
-                    "text": textInput,
-                    "chatId": chatId,
-                    "from_customer": false,
-                },
-            };
-        }
-
+        const variables = {
+            "message": {
+                "text": textInput,
+                "chatId": chatId,
+                "from_customer": false,
+            }
+        };
         if (textInput) {
-            // if(chatId){
-            addMessage({
-                variables: variables,
-                optimisticResponse: {
-                    addMessage: {
-                        id: Math.round(Math.random() * -1000000),
-                        from_customer: false,
-                        text: textInput,
-                        timestamp: (new Date()).getTime(),
-                        createdAt: new Date(),
-                        chat: {
-                            id: chatId,
-                            __typename: "Chat"
-                        },
-                        __typename: "Message"
+            if (chatId) {
+                addMessage({
+                    variables: variables,
+                    optimisticResponse: {
+                        addMessage: {
+                            id: Math.round(Math.random() * -1000000),
+                            from_customer: false,
+                            text: textInput,
+                            timestamp: (new Date()).getTime(),
+                            createdAt: new Date(),
+                            chat: {
+                                id: chatId
+                            },
+                            __typename: "Message"
+                        }
 
-                    }
+                    },
+                    // @ts-ignore
+                    update: (store, { data: { addMessage } }) => {
+                        console.log("in herer", addMessage)
+                        // read the data from the store for this query
+                        const data = store.readQuery({ query: GetMessagesDocument, variables: { chatId: chatId } });
 
-                },
-                // @ts-ignore
-                update: (store, { data: { addMessage } }) => {
-                    console.log("in here from addmessage", addMessage)
-                    // read the data from the store for this query
-                    let data
-                    if (chatId) {
-                        data = store.readQuery({ query: GetMessagesDocument, variables: { chatId: chatId } });
                         if (!data?.chat?.messages.find((msg) => msg?.id === addMessage?.id)) {
                             // add the messae from the mutation to the end
                             Object.assign({}, data, {
                                 chat: {
-                                    messages: [addMessage?.message, ...data?.chat?.messages!]
+                                    messages: [addMessage, ...data?.chat?.messages!]
                                 }
 
                             });
                         }
                         // write the data back to the store
                         store.writeQuery({ query: GetMessagesDocument, data });
-                    } else {
-                        console.log("The chat Id is undefined", chatId)
                     }
-
-
-                }
-            }).then(res => {
-                setTextInput('');
-            })
-            // } else {
-            //     console.log(" We dont have a cache to update")
-            // }
+                }).then(res => {
+                    setTextInput('');
+                })
+            } else {
+                console.log(" We dont have a cache to update")
+            }
         }
         setTextInput('');
     }

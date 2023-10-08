@@ -62,7 +62,7 @@ function ChatComponent({  chat }: Props) {
                             text: newLastmessage?.text,
                             createdAt: newLastmessage?.createdAt,
                             chat: {
-                                id: (chat?.id as number)
+                                id: chat?.id
                             }
                         }
                     });

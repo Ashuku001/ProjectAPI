@@ -179,13 +179,15 @@ function resolvers() {
 
         customers = await Customer.findAll(query);
         console.log(typeof customers);
-        // if (customers.length === 0) {
-        //   throw new Error(`No results found for ${text}`);
-        // }
+        if (customers.length === 0) {
+          console.log("Customer not found with the name".bgRed, text);
+          throw new Error(`No results found for ${text}`);
+        }
 
         const customerIds = customers.map((cus) => {
           return cus.id;
         });
+        console.log("Customer ids".bgBlue, customerIds);
         const chats = await Chat.findAll({
           where: {
             merchantId: context.merchant.id,
@@ -197,7 +199,12 @@ function resolvers() {
             chats.every((chat) => cus.id !== chat.customerId)
           );
         }
-        
+        console.log(
+          "The customers".bgBlue,
+          customers,
+          "The chats".bgCyan,
+          chats
+        );
         return { customers, chats };
       },
 
@@ -482,10 +489,10 @@ function resolvers() {
                   newChat.setMerchant(merchant),
                   newChat.setCustomer(customer),
                 ]);
-                // pubsub.publish("chatAdded", {
-                //   chatAdded: newChat,
-                //   merchantId: newChat.merchantId,
-                // });
+                pubsub.publish("chatAdded", {
+                  chatAdded: newChat,
+                  merchantId: newChat.merchantId,
+                });
                 addNewChat = true;
                 return newChat;
               });
@@ -529,10 +536,10 @@ function resolvers() {
                   newChat.setMerchant(merchant),
                   newChat.setCustomer(customer),
                 ]);
-                // pubsub.publish("chatAdded", {
-                //   message: newChat,
-                //   merchantId: newChat.merchantId,
-                // });
+                pubsub.publish("chatAdded", {
+                  chatAdded: newChat,
+                  merchantId: newChat.merchantId,
+                });
                 addNewChat = true;
                 return newChat;
               });
@@ -773,15 +780,15 @@ function resolvers() {
           }
         ),
       },
-      // chatAdded: {
-      //   subscribe: withFilter(
-      //     () => pubsub.asyncIterator("chatAdded"),
-      //     async (payload, variables, context) => {
-      //       console.log("Context33333333333333", context);
-      //       return payload.chatAdded.merchatId === context.merchant.id;
-      //     }
-      //   ),
-      // },
+      chatAdded: {
+        subscribe: withFilter(
+          () => pubsub.asyncIterator("chatAdded"),
+          async (payload, variables, context) => {
+            console.log("Context33333333333333", context);
+            return payload.chatAdded.merchatId === context.merchant.id;
+          }
+        ),
+      },
     },
   };
 
