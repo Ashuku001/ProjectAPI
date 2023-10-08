@@ -1,74 +1,158 @@
 'use client'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { AddMessageDocument, GetMessagesDocument, GetMessagesQuery } from '../../../../__gql__/graphql'
+import { AddMessageDocument, GetMessagesDocument, AddChatDocument, GetChatsDocument } from '../../../../__gql__/graphql'
+import { CustomerType } from '../../../../types'
+import { useRouter } from 'next/navigation'
 
 type Props = {
-    chatId: number | undefined
-    customerId?: number
+    chatId: number | undefined;
+    customer?: CustomerType
 }
 
-function TextInput({ chatId, customerId }: Props) {
+function TextInput({ chatId, customer }: Props) {
     const [textInput, setTextInput] = useState('')
+    const [newChatId, setNewChatId] = useState<number>(-1)
+    const router = useRouter()
+
+    if (newChatId && newChatId > 0) {
+        console.log("The new chats id", newChatId,)
+        chatId = newChatId
+    }
+
     const [addMessage] = useMutation(AddMessageDocument)
+    const [addChat] = useMutation(AddChatDocument, {
+        refetchQueries: [{ query: GetChatsDocument }]
+    })
     // console.log(addMessage)
+    console.log("chat id and customer in text input", chatId, customer)
+    console.log("The text input", textInput)
+
+
+    const addMessageFunction = (textInput: string, chatId: number) => {
+        addMessage({
+            variables: {
+                "message": {
+                    "text": textInput,
+                    "chatId": chatId,
+                    "from_customer": false,
+                }
+            },
+            optimisticResponse: {
+                addMessage: {
+                    id: Math.round(Math.random() * -1000000),
+                    from_customer: false,
+                    text: textInput,
+                    timestamp: (new Date()).getTime(),
+                    createdAt: new Date(),
+                    chat: {
+                        id: chatId
+                    },
+                    __typename: "Message"
+                }
+
+            },
+            // @ts-ignore
+            update: (store, { data: { addMessage } }) => {
+                console.log("in herer", addMessage)
+                // read the data from the store for this query
+                const data = store.readQuery({ query: GetMessagesDocument, variables: { chatId: (chatId as number) } });
+
+                console.log("data before adding message", data)
+                if (!data?.chat?.messages.find((msg) => msg?.id === addMessage?.id)) {
+                    // add the messae from the mutation to the end
+                    Object.assign({}, data, {
+                        chat: {
+                            messages: [addMessage, ...data?.chat?.messages!]
+                        }
+
+                    });
+                    console.log("new data after adding message", data)
+                }
+                // write the data back to the store
+                store.writeQuery({ query: GetMessagesDocument, data:data });
+            }
+        })
+
+        setTextInput('')
+    }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const variables = {
-            "message": {
-                "text": textInput,
-                "chatId": chatId,
-                "from_customer": false,
-            }
-        };
         if (textInput) {
-            if (chatId) {
-                addMessage({
-                    variables: variables,
-                    optimisticResponse: {
-                        addMessage: {
-                            id: Math.round(Math.random() * -1000000),
-                            from_customer: false,
-                            text: textInput,
-                            timestamp: (new Date()).getTime(),
-                            createdAt: new Date(),
-                            chat: {
-                                id: chatId
-                            },
-                            __typename: "Message"
-                        }
-
-                    },
-                    // @ts-ignore
-                    update: (store, { data: { addMessage } }) => {
-                        console.log("in herer", addMessage)
-                        // read the data from the store for this query
-                        const data = store.readQuery({ query: GetMessagesDocument, variables: { chatId: chatId } });
-
-                        if (!data?.chat?.messages.find((msg) => msg?.id === addMessage?.id)) {
-                            // add the messae from the mutation to the end
-                            Object.assign({}, data, {
-                                chat: {
-                                    messages: [addMessage, ...data?.chat?.messages!]
-                                }
-
-                            });
-                        }
-                        // write the data back to the store
-                        store.writeQuery({ query: GetMessagesDocument, data });
-                    }
-                }).then(res => {
-                    setTextInput('');
-                })
+            if (chatId && chatId !== undefined) {
+                addMessageFunction(textInput, chatId)
             } else {
-                console.log(" We dont have a cache to update")
+                // merchat creating a new chat and we already have a message
+                console.log(" We dont have a cache to update but the customerId", customer?.id)
+
+                addChat({
+                    variables: {
+                        chat: {
+                            customer: (customer?.id as number),
+                            merchant: null
+                        }
+                    },
+                    // optimisticResponse: {
+                    //     __typename: "RootMutation",
+                    //     addChat: {
+                    //         id: Math.round(Math.random() * -1000000),
+                    //         messages: {
+                    //             //@ts-ignore
+                    //             id: Math.round(Math.random() * -1000000),
+                    //             from_customer: false,
+                    //             text: 'loading....',
+                    //             timestamp: new Date().getTime(),
+                    //             createdAt: 'loading...',
+                    //             chat: {
+                    //                 id: Math.round(Math.random() * -1000000),
+                    //             }
+                    //         },
+                    //         customer: {
+                    //             id: (customer?.id as number),
+                    //             first_name: customer?.first_name,
+                    //             last_name: customer?.last_name,
+                    //             phone_number: (customer?.phone_number as string),
+                    //             __typename: "Customer"
+                    //         },
+                    //         __typename: "Chat"
+                    //     }
+
+                    // },
+                    // @ts-ignore
+                    update: (cache, { data: { addChat } }) => {
+                        const data = cache.readQuery({ query: GetChatsDocument })
+                        console.log("Existing data", data)
+
+                        if (!data?.chats?.find((chat) => chat?.id === addChat?.id)) {
+                            // add the messae from the mutation to the end
+                            console.log("assigning this", addChat)
+                            // Object.assign({}, data, {
+                            //     chats: [...data?.chats!, addChat,]
+                            // });
+                            data?.chats?.push(addChat)
+                            console.log("New data", data)
+                            cache.writeQuery({ query: GetChatsDocument, data: data })
+                            setNewChatId(addChat.id)
+                        }
+                    }
+                })
             }
         }
-        setTextInput('');
+
     }
 
+    if(newChatId > 0 && newChatId !== undefined){
+        console.log("adding the new message to new chat", newChatId, chatId)
+        addMessageFunction(textInput, chatId!)
+        router.push(`/chats/${newChatId}`)
+        setNewChatId(-100)
+    }
+
+    useEffect(() => {
+        console.log("triggered a rerender")
+    }, [])
     return (
         <>
             <div className="flex justify-between items-center">

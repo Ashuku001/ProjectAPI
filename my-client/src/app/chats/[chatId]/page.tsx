@@ -7,10 +7,11 @@ import MessageList from "../components/MessageList"
 import { GetMessagesDocument, MessageAddedDocument, GetCustomerInfoDocument, } from "../../../../__gql__/graphql"
 import { useEffect } from "react"
 import { useSearchParams } from "next/navigation"
+import { CustomerType, MessageType } from "../../../../types"
 
 type Props = {
     params: {
-        chatId?: string
+        chatId?: string | null
     }
 }
 
@@ -18,15 +19,17 @@ type Props = {
 function ChatPage({ params: { chatId } }: Props) {
     const searchParams = useSearchParams()
 
+
     let id = undefined
-    if (typeof chatId !== typeof undefined) {
+    if (chatId !== undefined) {
+        console.log("in here")
         id = parseInt(chatId!)
     }
 
     let customer = null
     let messages = null
     let customerId = undefined
-
+    
     if (id) {
         const { data, subscribeToMore } = useSuspenseQuery(
             GetMessagesDocument,
@@ -46,7 +49,7 @@ function ChatPage({ params: { chatId } }: Props) {
                     }
 
                     const newMessage = subscriptionData.data.messageAdded?.message
-                    console.log("NEW MESSAGE IN PAGE", newMessage)
+                    // console.log("NEW MESSAGE IN PAGE", newMessage)
 
                     if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
                         return Object.assign({}, prev, {
@@ -76,21 +79,24 @@ function ChatPage({ params: { chatId } }: Props) {
         )
         customerId = customerId
         customer = data?.customer
+        console.log(customer)
     }
+    console.log("MESSAGES and customer info", messages, customer)
 
-    console.log("MESSAGES", messages, customer)
+    // useEffect(() => {console.log("the new chat id", newChatId, "and id ", id!)}, [newChatId])
 
     const content =
         (<div className='right bg-[#F0EBE4] dark:bg-slate-900 flex flex-col'>
             <div className="right-upper bg-[#F0F2F5] dark:bg-slate-800 flex justify-between items-center px-4 py-[0.60rem]">
-                <ChatHeader customer={customer} />
+                <ChatHeader customer={customer as CustomerType} />
             </div>
             <div className="h-[68vh] overflow-y-scroll">
-                {/* @ts-ignore */}
-                <MessageList messages={messages} />
+                <MessageList messages={messages as MessageType[]} />
             </div>
             <div className="right-bottom w-full top-full sticky flex justify-between items-center px-4 py-4 space-x-2 bg-slate-100 dark:bg-gray-800">
-                <TextInput chatId={id} customerId={customerId} />
+                {id ?<TextInput chatId={id}/>
+                    : <TextInput chatId={id} customer={customer as CustomerType}/>
+                }
             </div>
 
         </div>

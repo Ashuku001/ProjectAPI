@@ -1,13 +1,8 @@
 import Image from 'next/image'
+import { CustomerType } from '../../../../types';
 
 type Props = {
-    customer: {
-        __typename?: "Customer" | undefined;
-        id?: number | null | undefined;
-        first_name?: string | null | undefined;
-        last_name?: string | null | undefined;
-        phone_number: string;
-    } | null | undefined
+    customer: CustomerType | undefined
 }
 
 function ChatHeader({ customer }: Props) {

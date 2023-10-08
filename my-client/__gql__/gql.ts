@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}": types.AddChatDocument,
     "mutation AddMessage($message: MessageInput!, $customerId: Int) {\n  addMessage(message: $message, customerId: $customerId) {\n    __typename\n    id\n    from_customer\n    text\n    timestamp\n    createdAt\n    chat {\n      id\n    }\n  }\n}": types.AddMessageDocument,
     "query GetCustomerInfo($customerId: Int!) {\n  customer(customerId: $customerId) {\n    id\n    first_name\n    last_name\n    phone_number\n  }\n}": types.GetCustomerInfoDocument,
     "query GetCurrentMerchant {\n  currentMerchant {\n    id\n    business_name\n    username\n  }\n}": types.GetCurrentMerchantDocument,
@@ -22,7 +23,7 @@ const documents = {
     "query GetMessages($chatId: Int!) {\n  chat(chatId: $chatId) {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    messages {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n      __typename\n    }\n  }\n}": types.GetMessagesDocument,
     "mutation signupMerchant($username: String!, $password: String!, $email: String, $whatsapp_phone_number: String!) {\n  signupMerchant(\n    username: $username\n    password: $password\n    email: $email\n    whatsapp_phone_number: $whatsapp_phone_number\n  ) {\n    token\n  }\n}": types.SignupMerchantDocument,
     "subscription chatAdded($merchantId: Int) {\n  chatAdded(merchantId: $merchantId) {\n    id\n    messages {\n      id\n      text\n      __typename\n    }\n  }\n}": types.ChatAddedDocument,
-    "query ChatsList {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}": types.ChatsListDocument,
+    "query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}": types.GetChatsDocument,
     "query customersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}": types.CustomersSearchDocument,
     "fragment merchantFragment on Merchant {\n  username\n  business_name\n}": types.MerchantFragmentFragmentDoc,
     "fragment messageFragment on Message {\n  text\n  timestamp\n  from_customer\n  createdAt\n}": types.MessageFragmentFragmentDoc,
@@ -43,6 +44,10 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}"): (typeof documents)["mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -82,7 +87,7 @@ export function gql(source: "subscription chatAdded($merchantId: Int) {\n  chatA
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query ChatsList {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"): (typeof documents)["query ChatsList {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"];
+export function gql(source: "query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"): (typeof documents)["query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

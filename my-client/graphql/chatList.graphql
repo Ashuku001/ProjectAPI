@@ -1,4 +1,4 @@
-query ChatsList {
+query GetChats {
   chats {
     id
     customer {

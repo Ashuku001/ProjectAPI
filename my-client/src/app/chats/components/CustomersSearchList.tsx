@@ -39,7 +39,7 @@ function CustomersList({ customers, chats, setSearchString }: Props) {
 
     useEffect(() => {
         showList(customers)
-    }, [customers])
+    }, [])
 
     useEffect(() => {
         return () => {
@@ -54,7 +54,7 @@ function CustomersList({ customers, chats, setSearchString }: Props) {
                     {chats?.length !== 0 && (
                         <div className="flex flex-col items-center">
                             <h1 className="text-[18px] font-sans font-bold text-slate-400">Chats</h1>
-                            {chats?.map(chat => <ChatComponent chat={chat} />)}
+                            {chats?.map(chat => <ChatComponent key={chat?.id} chat={chat} />)}
                         </div>
                     )}
                     {customers?.length !== 0 &&

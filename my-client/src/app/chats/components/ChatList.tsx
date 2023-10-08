@@ -2,12 +2,12 @@
 import {
     useSuspenseQuery,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-import { ChatsListDocument, ChatAddedDocument } from "../../../../__gql__/graphql";
+import { GetChatsDocument, ChatAddedDocument } from "../../../../__gql__/graphql";
 import ChatComponent from "./ChatComponent";
 import { useEffect } from "react";
 
 function ChatList() {
-    const { data, subscribeToMore } = useSuspenseQuery(ChatsListDocument)
+    const { data, subscribeToMore } = useSuspenseQuery(GetChatsDocument)
     const chats = data?.chats
 
     const subscribeToNewMessages = () => {
@@ -33,7 +33,7 @@ function ChatList() {
         })
     }
 
-    useEffect(() => subscribeToNewMessages(), [])
+    useEffect(() => subscribeToNewMessages(), [chats])
 
     return (
         <div className="h-[79.5vh] max-w-full">

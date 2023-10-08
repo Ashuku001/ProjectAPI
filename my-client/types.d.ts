@@ -48,3 +48,17 @@ type ChatType = {
         phone_number: string;
     };
 } | null
+
+
+type MessageType = {
+    __typename: "Message";
+    id: number;
+    text: string;
+    from_customer?: boolean | null | undefined;
+    timestamp?: number | null | undefined;
+    createdAt?: any;
+    chat: {
+        __typename?: "Chat" | undefined;
+        id?: number | undefined;
+    };
+} | null

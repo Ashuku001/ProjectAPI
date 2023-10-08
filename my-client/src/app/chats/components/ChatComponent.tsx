@@ -88,13 +88,13 @@ function ChatComponent({  chat }: Props) {
                 <div className="p-3">
                     <Image
                         src={'/profile.jpg'}
-                        height={45}
-                        width={45}
+                        height={40}
+                        width={40}
                         alt='P'
                     />
                 </div>
                 <div className="flex justify-between flex-1 flex-col" >
-                    <div className="chat-name flex  justify-start items-start ">
+                    <div className="chat-name flex  justify-start items-start  h-6">
                         <h3 className="text-md font-sans font-normal line-clamp-1">
                             <p className=' font-sans text-base capitalize'>{chat?.customer?.first_name || chat?.customer?.last_name
                                 ? `${chat?.customer?.first_name} ${"   "}  ${chat?.customer?.last_name}`
@@ -106,11 +106,11 @@ function ChatComponent({  chat }: Props) {
 
                     </div>
                     <div className="last-message">
-                        {lastMessage && <p className="text-md text-left text-gray-500 font-sans font-normal line-clamp-1 w-[240px]">{lastMessage?.text}</p>}
+                        {lastMessage && <p className="text-md text-left text-gray-500 font-sans font-normal line-clamp-1 w-[80%] h-6">{lastMessage?.text}</p>}
                     </div>
                 </div>
             </div>
-            <hr className="w-[85%] float-right bg-gray-300 dark:bg-gray-600"></hr>
+            <hr className="w-[85%] float-right bg-gray-800 dark:bg-gray-800"></hr>
         </Link>
     )
 }

@@ -5,16 +5,10 @@ import MessageComponent from "./MessageComponent"
 import { GetMessagesDocument } from "../../../../__gql__/graphql"
 import { skipToken } from "@apollo/client"
 import { MessageAddedDocument } from "../../../../__gql__/graphql"
+import { MessageType } from '../../../../types'
 
 type Props = {
-  messages: ({
-    __typename?: "Message" | undefined;
-    id?: number | null | undefined;
-    text: string;
-    from_customer: boolean;
-    timestamp?: any;
-    createdAt?: any;
-  } | null) [] | undefined
+  messages: MessageType[] | null | undefined
 
 }
 

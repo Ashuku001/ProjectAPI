@@ -2,7 +2,7 @@ import Image from "next/image"
 
 function Uppernav() {
     return (
-        <div className="upper-nav bg-[#F0F2F5] dark:bg-gray-700 flex justify-between items-center px-4 py-[0.60rem] border-r border-slate-300">
+        <div className="upper-nav bg-[#F0F2F5] dark:bg-gray-700 flex justify-between items-center px-4 py-[0.60rem] ">
             <div className="dp flex justify-center items-center w-[40px] h-[40px]">
                 <Image
                     className="rounded-full"
