@@ -82,7 +82,7 @@ function ChatComponent({  chat }: Props) {
     return (
         <Link
             href={`/chats/${chat?.id}`}
-            className={`chatbox hover:bg-gray-700 cursor-pointer w-full ${chat?.id! <0 ? 'bg-red': ''}`}
+            className={`chatboxhover:bg-gray-400  dark:hover:bg-gray-700 cursor-pointer w-full ${chat?.id! <0 ? 'bg-red': ''}`}
         >
             <div className="flex items-center w-full">
                 <div className="p-3">

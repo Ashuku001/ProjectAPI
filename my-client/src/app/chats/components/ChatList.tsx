@@ -2,7 +2,7 @@
 import {
     useSuspenseQuery,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-import { GetChatsDocument, ChatAddedDocument } from "../../../../__gql__/graphql";
+import { GetChatsDocument, ChatAddedDocument, MessageAddedDocument } from "../../../../__gql__/graphql";
 import ChatComponent from "./ChatComponent";
 import { useEffect } from "react";
 
@@ -12,17 +12,18 @@ function ChatList() {
 
     const subscribeToNewMessages = () => {
         subscribeToMore({
-            document: ChatAddedDocument,
+            document: MessageAddedDocument,
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data || !(prev?.chats?.length)) {
                     return prev;
                 }
 
                 console.log("SUBSCRIPTION DATA IN CHATLIST", subscriptionData)
-                const newChat = subscriptionData.data.chatAdded
+                const newChat = subscriptionData.data.messageAdded.chat
 
 
-                if (!prev?.chats?.find((chat) => chat?.id === chat?.id)) {
+                if (!prev?.chats?.find((chat) => chat?.id === newChat?.id)) {
+                    console.log("adding  a new chat", newChat)
                     return Object.assign({}, prev, {
                         chats: [newChat, ...prev?.chats],
                     });

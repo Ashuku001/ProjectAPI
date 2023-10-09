@@ -1,4 +1,3 @@
-import DefaultContainer from "./components/Default"
 
 function page() {
   return (

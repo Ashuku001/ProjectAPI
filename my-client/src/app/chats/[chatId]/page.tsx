@@ -68,12 +68,10 @@ function ChatPage({ params: { chatId } }: Props) {
         useEffect(() => subscribeToNewMessaes(), [])
 
     } else {
-        console.log("No search")
         let temp = searchParams.get("customer_id")
         if (temp) {
             customerId = parseInt(temp)
         }
-        console.log("there is no id customer id", customerId)
         const { data } = useSuspenseQuery(GetCustomerInfoDocument,
             customerId ? { variables: { customerId: customerId } } : skipToken
         )
@@ -81,7 +79,6 @@ function ChatPage({ params: { chatId } }: Props) {
         customer = data?.customer
         console.log(customer)
     }
-    console.log("MESSAGES and customer info", messages, customer)
 
     // useEffect(() => {console.log("the new chat id", newChatId, "and id ", id!)}, [newChatId])
 

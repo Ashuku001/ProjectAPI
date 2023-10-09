@@ -5,7 +5,7 @@ export type MerchantType = {
     business_name: string
 }
 
-type Links = "chats" | "My-templates" | "My-customers"
+type Links = "chats" | "My-templates" | "My-customers" | "Settings"
 
 type Template = {
     name: string,

@@ -15,11 +15,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}": types.AddChatDocument,
     "mutation AddMessage($message: MessageInput!, $customerId: Int) {\n  addMessage(message: $message, customerId: $customerId) {\n    __typename\n    id\n    from_customer\n    text\n    timestamp\n    createdAt\n    chat {\n      id\n    }\n  }\n}": types.AddMessageDocument,
+    "mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}": types.AddSettingDocument,
     "query GetCustomerInfo($customerId: Int!) {\n  customer(customerId: $customerId) {\n    id\n    first_name\n    last_name\n    phone_number\n  }\n}": types.GetCustomerInfoDocument,
     "query GetCurrentMerchant {\n  currentMerchant {\n    id\n    business_name\n    username\n  }\n}": types.GetCurrentMerchantDocument,
+    "query GetSetting($username: String) {\n  setting(username: $username) {\n    callBack_url\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}": types.GetSettingDocument,
     "query LastMessage($chatId: Int!) {\n  lastMessage(chatId: $chatId) {\n    id\n    text\n    createdAt\n    chat {\n      id\n      __typename\n    }\n    __typename\n  }\n}": types.LastMessageDocument,
     "mutation loginMerchant($username: String!, $password: String!) {\n  loginMerchant(username: $username, password: $password) {\n    token\n  }\n}": types.LoginMerchantDocument,
-    "subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n    }\n  }\n}": types.MessageAddedDocument,
+    "subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n      customer {\n        id\n        whatsapp_name\n        phone_number\n        first_name\n        last_name\n        __typename\n      }\n      messages {\n        id\n        from_customer\n        text\n        timestamp\n        createdAt\n        chat {\n          id\n        }\n      }\n    }\n  }\n}": types.MessageAddedDocument,
     "query GetMessages($chatId: Int!) {\n  chat(chatId: $chatId) {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    messages {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n      __typename\n    }\n  }\n}": types.GetMessagesDocument,
     "mutation signupMerchant($username: String!, $password: String!, $email: String, $whatsapp_phone_number: String!) {\n  signupMerchant(\n    username: $username\n    password: $password\n    email: $email\n    whatsapp_phone_number: $whatsapp_phone_number\n  ) {\n    token\n  }\n}": types.SignupMerchantDocument,
     "subscription chatAdded($merchantId: Int) {\n  chatAdded(merchantId: $merchantId) {\n    id\n    messages {\n      id\n      text\n      __typename\n    }\n  }\n}": types.ChatAddedDocument,
@@ -55,11 +57,19 @@ export function gql(source: "mutation AddMessage($message: MessageInput!, $custo
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"): (typeof documents)["mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "query GetCustomerInfo($customerId: Int!) {\n  customer(customerId: $customerId) {\n    id\n    first_name\n    last_name\n    phone_number\n  }\n}"): (typeof documents)["query GetCustomerInfo($customerId: Int!) {\n  customer(customerId: $customerId) {\n    id\n    first_name\n    last_name\n    phone_number\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query GetCurrentMerchant {\n  currentMerchant {\n    id\n    business_name\n    username\n  }\n}"): (typeof documents)["query GetCurrentMerchant {\n  currentMerchant {\n    id\n    business_name\n    username\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query GetSetting($username: String) {\n  setting(username: $username) {\n    callBack_url\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"): (typeof documents)["query GetSetting($username: String) {\n  setting(username: $username) {\n    callBack_url\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -71,7 +81,7 @@ export function gql(source: "mutation loginMerchant($username: String!, $passwor
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n    }\n  }\n}"): (typeof documents)["subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n    }\n  }\n}"];
+export function gql(source: "subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n      customer {\n        id\n        whatsapp_name\n        phone_number\n        first_name\n        last_name\n        __typename\n      }\n      messages {\n        id\n        from_customer\n        text\n        timestamp\n        createdAt\n        chat {\n          id\n        }\n      }\n    }\n  }\n}"): (typeof documents)["subscription messageAdded($chatId: Int!) {\n  messageAdded(chatId: $chatId) {\n    message {\n      id\n      text\n      from_customer\n      timestamp\n      createdAt\n      chat {\n        id\n        __typename\n      }\n      __typename\n    }\n    chat {\n      id\n      customer {\n        id\n        whatsapp_name\n        phone_number\n        first_name\n        last_name\n        __typename\n      }\n      messages {\n        id\n        from_customer\n        text\n        timestamp\n        createdAt\n        chat {\n          id\n        }\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

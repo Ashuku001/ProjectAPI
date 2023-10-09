@@ -169,12 +169,12 @@ function TextInput({ chatId, customer }: Props) {
                     placeholder="Type a message"
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
-                    className="bg-white dark:bg-gray-700 rounded-lg px-4 py-2 outline-none w-full flex-1 pr-8 cursor-auto"
+                    className="bg-slate-200 dark:bg-gray-700 rounded-lg px-4 py-2 outline-none w-full flex-1 pr-8 cursor-auto"
                 />
                 <button
                     disabled={!textInput}
                     type="submit"
-                    className='bg-slate-100 dark:bg-gray-500 rounded-lg px-4 py-2 outline-none -ml-5 rounded-l-none'
+                    className='bg-slate-300 dark:bg-gray-500 rounded-lg px-4 py-2 outline-none -ml-5 rounded-l-none'
                 >
                     Send
                 </button>
