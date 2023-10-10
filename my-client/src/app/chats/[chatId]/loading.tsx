@@ -17,7 +17,7 @@ function loading() {
                     </div>
                 </div>
             </div>
-            <div className="h-[68vh] overflow-y-scroll">
+            <div className="h-[68vh] overflow-y-auto">
                         <div className=' space-y-5  flex flex-col w-full'>
                             {[...Array(4)].map((_, i) => (
                                 <div key={i} className='flex flex-row'>

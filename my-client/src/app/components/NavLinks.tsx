@@ -11,7 +11,7 @@ function NavLinks() {
     }
 
     return (
-        <nav className="text-[18px] text-left">
+        <nav className="flex space-x-4 font-bold text-[16px]">
             {links.map((path, i) => (
                 <NavLink key={i} path={path} is_active={is_active(path)}/>
             ))}

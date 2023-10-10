@@ -10,16 +10,18 @@ function ChatList() {
     const { data, subscribeToMore } = useSuspenseQuery(GetChatsDocument)
     const chats = data?.chats
 
-    const subscribeToNewMessages = () => {
+    const subscribeToNewChats = () => {
         subscribeToMore({
-            document: MessageAddedDocument,
+            document: ChatAddedDocument,
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data || !(prev?.chats?.length)) {
                     return prev;
                 }
+                
 
                 console.log("SUBSCRIPTION DATA IN CHATLIST", subscriptionData)
-                const newChat = subscriptionData.data.messageAdded.chat
+                const newChat = subscriptionData.data?.chatAdded
+                console.log(newChat)
 
 
                 if (!prev?.chats?.find((chat) => chat?.id === newChat?.id)) {
@@ -34,10 +36,10 @@ function ChatList() {
         })
     }
 
-    useEffect(() => subscribeToNewMessages(), [chats])
+    useEffect(() => subscribeToNewChats(), [chats])
 
     return (
-        <div className="h-[79.5vh] max-w-full">
+        <div className="h-[79.5vh] max-w-full overflow-y-auto">
             {chats?.map(chat => (
                 // @ts-ignore
                 <ChatComponent key={chat?.id} chat={chat}/>

@@ -9,29 +9,10 @@ import TimeAgo from "react-timeago"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation"
+import { ChatType } from "../../../../types"
 
 type Props = {
-    chat: ({
-        __typename?: "Chat" | undefined;
-        id?: number | null | undefined;
-        customer: {
-            __typename?: 'Customer';
-            id?: number | null;
-            first_name?: string | null;
-            last_name?: string | null;
-            phone_number: string;
-        };
-        lastMessage?: {
-            __typename?: "Message" | undefined;
-            id?: number | undefined;
-            text: string;
-            createdAt?: any | null;
-            chat: {
-                __typename?: 'Chat';
-                id?: number | null;
-            };
-        } | null | undefined;
-    } | null),
+    chat: ChatType,
 }
 
 function ChatComponent({  chat }: Props) {

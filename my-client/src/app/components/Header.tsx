@@ -11,10 +11,12 @@ function Header() {
                 <h1 className='text-3xl font-serif font-bold'>
                     CRM
                 </h1>
-                <MerchantsLogo/>
-                <DarkModeButton/>
+                <MerchantsLogo />
+                <DarkModeButton />
             </div>
-            <NavLinks />
+            <div className='flex'>
+                <NavLinks />
+            </div>
             <hr className='my-1 bg-wh' />
         </header>
     )

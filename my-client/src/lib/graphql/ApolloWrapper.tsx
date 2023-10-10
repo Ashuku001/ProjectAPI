@@ -11,15 +11,17 @@ import {
     NextSSRApolloClient,
     SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-import { setVerbosity } from "ts-invariant";
 import { setContext } from '@apollo/client/link/context'
-import { createFragmentRegistry } from "@apollo/client/cache";
 
-setVerbosity("debug"); // enabling debug
 
-// // detect whether client is using http or https
-// const protocol = (location.protocol != 'https:') ? 'ws://': 'wss://';
-// const port = location.port ? ":"+location.port: "";
+// client schema
+const typeDefs = gql`
+    extend type Query {
+        isModalOpen: Boolean!
+    }
+
+`
+
 
 // this client will be SSR-rendered for the initial request
 // enable dynamic update of the browser when cache updates throu query or mutations
@@ -63,8 +65,6 @@ function makeClient() {
         },
     }))
 
-    // split function takes three parameters a function that's called for each operation
-    // to execute the link to use for an operation if the function returns  a truthy 
     // and the link to use for an operation if the function returns a falsy valu
     const splitLink = split(
         ({ query }) => {
@@ -93,6 +93,7 @@ function makeClient() {
                     splitLink,
                 ])
                 : splitLink,
+        typeDefs,
     });
 }
 

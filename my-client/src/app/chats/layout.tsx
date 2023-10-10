@@ -1,6 +1,7 @@
 import ChatList from "./components/ChatList"
 import ChatSearchBar from "./components/ChatSearchBar"
 import Uppernav from "./components/Uppernav"
+import MyDialog from "./components/Modal"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -10,13 +11,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <Uppernav />
                     <ChatSearchBar />
                     <hr className="h-[0.01px] bg-slate-100 dark:bg-gray-500"></hr>
-                    <div className="overflow-y-scroll">
+                    <div>
                         <ChatList />
                     </div>
                 </div>
             </div>
             <div className="flex-1 bg-slate-300 dark:bg-slate-800 h-full">
                 {children}
+                <MyDialog />
             </div>
         </div>
     )

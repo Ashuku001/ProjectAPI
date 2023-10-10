@@ -5,7 +5,7 @@ export type MerchantType = {
     business_name: string
 }
 
-type Links = "chats" | "My-templates" | "My-customers" | "Settings"
+type Links = "chats" | "My-templates" | "My-customers" | "Settings" | "Bulk-messaging"
 
 type Template = {
     name: string,
@@ -35,7 +35,7 @@ type CustomerType = {
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
     phone_number: string;
-} | null
+} | null | undefined
 
 type ChatType = {
     __typename?: "Chat" | undefined;
@@ -47,7 +47,17 @@ type ChatType = {
         last_name?: string | null | undefined;
         phone_number: string;
     };
-} | null
+    lastMessage?: {
+        __typename?: "Message" | undefined;
+        id?: number | undefined;
+        text: string;
+        createdAt?: any | null;
+        chat: {
+            __typename?: 'Chat';
+            id?: number | null;
+        };
+    } | null | undefined;
+} | null | undefined
 
 
 type MessageType = {

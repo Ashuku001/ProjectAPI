@@ -8,7 +8,6 @@ import { GetMessagesDocument, MessageAddedDocument, GetCustomerInfoDocument, } f
 import { useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { CustomerType, MessageType } from "../../../../types"
-
 type Props = {
     params: {
         chatId?: string | null
@@ -48,18 +47,21 @@ function ChatPage({ params: { chatId } }: Props) {
                         return prev;
                     }
 
+                    console.log("subscription data from the server",subscriptionData.data.messageAdded?.message)
+
                     const newMessage = subscriptionData.data.messageAdded?.message
                     // console.log("NEW MESSAGE IN PAGE", newMessage)
-
-                    if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
-                        return Object.assign({}, prev, {
-                            chat: {
-                                messages: [newMessage, ...prev?.chat?.messages!],
-                            }
-
-                        });
-                    } else {
-                        return prev
+                    if (newMessage){
+                        if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
+                            return Object.assign({}, prev, {
+                                chat: {
+                                    messages: [newMessage, ...prev?.chat?.messages!],
+                                }
+    
+                            });
+                        } else {
+                            return prev
+                        }
                     }
                 }
             })
@@ -87,7 +89,7 @@ function ChatPage({ params: { chatId } }: Props) {
             <div className="right-upper bg-[#F0F2F5] dark:bg-slate-800 flex justify-between items-center px-4 py-[0.60rem]">
                 <ChatHeader customer={customer as CustomerType} />
             </div>
-            <div className="h-[68vh] overflow-y-scroll">
+            <div className="h-[68vh] overflow-y-auto">
                 <MessageList messages={messages as MessageType[]} />
             </div>
             <div className="right-bottom w-full top-full sticky flex justify-between items-center px-4 py-4 space-x-2 bg-slate-100 dark:bg-gray-800">
@@ -95,7 +97,6 @@ function ChatPage({ params: { chatId } }: Props) {
                     : <TextInput chatId={id} customer={customer as CustomerType}/>
                 }
             </div>
-
         </div>
         )
 

@@ -1,36 +1,33 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { CustomerFragmentFragment } from "../../../../__gql__/graphql";
+import {  useEffect, useState } from "react"
 import { ChatType, CustomerType } from "../../../../types";
 import ChatComponent from "./ChatComponent";
 
 type Props = {
     customers?: (CustomerType)[] | null | undefined;
     chats?: (ChatType)[] | null | undefined
-    setSearchString: Dispatch<SetStateAction<string>>
 }
 
-function CustomersList({ customers, chats, setSearchString }: Props) {
+function CustomersList({ customers, chats }: Props) {
     const [show, setShowList] = useState(false)
 
     const handleShow = (show: boolean) => {
-        console.log("handling show")
+        console.log("handling show", show)
         if (show) {
             document.addEventListener('click',
                 handleShow.bind(null, !show), true);
-        } else {
-            // setSearchString('')
-            document.removeEventListener('click',
+            } else {
+                document.removeEventListener('click',
                 handleShow.bind(null, !show), true)
-        }
-        setShowList(show)
+            }
+            setShowList(show)
     }
 
 
     const showList = (customers: CustomerType[] | null | undefined) => {
-        console.log(customers?.length)
-        if (customers?.length) {
+        console.log("The search results",customers?.length)
+        if (customers?.length || chats?.length) {
             handleShow(true)
         } else {
             handleShow(false)
@@ -48,7 +45,7 @@ function CustomersList({ customers, chats, setSearchString }: Props) {
     })
 
     return (
-        <div className="absolute top-0 right-[0] mx-auto px-2 bg-[#ffffff] dark:bg-gray-800   overflow-y-scroll max-h-[70vh] w-full">
+        <div className={`absolute top-0 right-[0] mx-auto px-2 bg-[#ffffff] dark:bg-gray-800 overflow-y-auto max-h-[70vh] w-full ${show ? '' : 'hidden'}`}>
             {(chats || customers) && (
                 <div>
                     {chats?.length !== 0 && (
