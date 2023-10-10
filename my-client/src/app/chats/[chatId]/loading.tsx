@@ -21,7 +21,7 @@ function loading() {
                         <div className=' space-y-5  flex flex-col w-full'>
                             {[...Array(4)].map((_, i) => (
                                 <div key={i} className='flex flex-row'>
-                                    <div className={`border rounded-r-lg md:rounded-lg p-5 w-[200px] md:w-[350px] lg:w-[500px] ]${(i % 2) == 0 ? 'ml-[20%]' : 'mr-[20%]'}`}>
+                                    <div className={`border rounded-r-lg md:rounded-lg p-5 w-[200px] md:w-[350px] lg:w-[500px] ]${((i as number) % 2) == 0 ? 'ml-[20%]' : 'mr-[20%]'}`}>
                                         <p className='font-bold'>
                                             <Skeleton />
                                         </p>
@@ -43,7 +43,7 @@ function loading() {
             </div>
             <div className='flex flex-row items-center justify-center'>
                 <Skeleton count={1} circle={true} width={'40px'} height={'40px'} />
-                <Skeleton count={1} height={'40px'} />
+                <Skeleton count={1} />
                 <Skeleton count={1} circle={true} width={'40px'} height={'40px'} />
             </div>
         </div>

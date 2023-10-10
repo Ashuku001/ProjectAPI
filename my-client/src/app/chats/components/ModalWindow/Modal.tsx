@@ -1,17 +1,18 @@
 'use client'
-import { Fragment, useState } from 'react'
+import { FormEvent, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useModal } from '../store/localStore'
+import { useModal } from '../../store/localStore'
 import { useReactiveVar } from '@apollo/client'
-import ActiveComponents from './ActiveComponents'
+import TemplateTabs from './RemoteTemplateType'
+
 
 function MyDialog() {
     // const [isOpen, closeModal] = useModal((state) => [state.isOpen, state.closeModal])
     let isOpen = useReactiveVar(useModal)[0]
     console.log("IS OPEN VALUE", isOpen)
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
     }
 
     return (
@@ -52,8 +53,8 @@ function MyDialog() {
                                 <Dialog.Description className={'my-2'}>
                                     Your active templates
                                 </Dialog.Description>
-                                <div className='w-full h-[44vh] overflow-y-hidden  flex flex-row'>
-                                    <ActiveComponents />
+                                <div className='w-full h-[55vh] overflow-y-hidden  flex flex-row'>
+                                    <TemplateTabs/>
                                     <div className='flex-1 p-2 w-[50%]'>
                                         <h1 className='text-center'>The preview</h1>
                                         <div>

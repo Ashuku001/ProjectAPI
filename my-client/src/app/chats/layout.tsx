@@ -1,7 +1,7 @@
 import ChatList from "./components/ChatList"
 import ChatSearchBar from "./components/ChatSearchBar"
 import Uppernav from "./components/Uppernav"
-import MyDialog from "./components/Modal"
+import MyDialog from "./components/ModalWindow/Modal"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
