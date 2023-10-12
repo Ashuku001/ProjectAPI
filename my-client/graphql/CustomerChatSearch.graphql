@@ -1,0 +1,22 @@
+# import customerFragment from './fragments/customerFragment.graphql
+query CustomerChatSearch($page: Int, $limit: Int, $text: String!) {
+  customerChatSearch(page: $page, limit: $limit, text: $text) {
+    customers {
+      id
+      first_name
+      last_name
+      phone_number
+      __typename
+    }
+    chats {
+      id
+      customer {
+        id
+        first_name
+        last_name
+        phone_number
+        __typename
+      }
+    }
+  }
+}

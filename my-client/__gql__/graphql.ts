@@ -91,8 +91,8 @@ export type Message = {
   chat: Chat;
   createdAt?: Maybe<Scalars['Date']['output']>;
   from_customer?: Maybe<Scalars['Boolean']['output']>;
-  id: Scalars['Int']['output'];
-  text: Scalars['String']['output'];
+  id?: Maybe<Scalars['Int']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
   timestamp?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -199,8 +199,9 @@ export type RootQuery = {
   chats?: Maybe<Array<Maybe<Chat>>>;
   currentMerchant?: Maybe<Merchant>;
   customer?: Maybe<Customer>;
+  customerChatSearch?: Maybe<CusChatSearch>;
   customers?: Maybe<Array<Maybe<Customer>>>;
-  customersSearch?: Maybe<CusChatSearch>;
+  customersSearch?: Maybe<Array<Maybe<Customer>>>;
   lastMessage?: Maybe<Message>;
   products?: Maybe<Array<Maybe<Product>>>;
   setting?: Maybe<Setting>;
@@ -214,6 +215,13 @@ export type RootQueryChatArgs = {
 
 export type RootQueryCustomerArgs = {
   customerId: Scalars['Int']['input'];
+};
+
+
+export type RootQueryCustomerChatSearchArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  text: Scalars['String']['input'];
 };
 
 
@@ -274,12 +282,19 @@ export type SettingInput = {
   callBack_url?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AddCustomerMutationVariables = Exact<{
+  customer: CustomerInput;
+}>;
+
+
+export type AddCustomerMutation = { __typename?: 'RootMutation', addCustomer?: { __typename?: 'Customer', whatsapp_name?: string | null, phone_number: string, first_name?: string | null, last_name?: string | null } | null };
+
 export type AddChatMutationVariables = Exact<{
   chat: ChatInput;
 }>;
 
 
-export type AddChatMutation = { __typename?: 'RootMutation', addChat?: { __typename: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, whatsapp_name?: string | null, phone_number: string, first_name?: string | null, last_name?: string | null }, messages: Array<{ __typename?: 'Message', id: number, from_customer?: boolean | null, text: string, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null };
+export type AddChatMutation = { __typename?: 'RootMutation', addChat?: { __typename: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, whatsapp_name?: string | null, phone_number: string, first_name?: string | null, last_name?: string | null }, messages: Array<{ __typename?: 'Message', id?: number | null, from_customer?: boolean | null, text?: string | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null };
 
 export type AddMessageMutationVariables = Exact<{
   message: MessageInput;
@@ -287,7 +302,7 @@ export type AddMessageMutationVariables = Exact<{
 }>;
 
 
-export type AddMessageMutation = { __typename?: 'RootMutation', addMessage?: { __typename: 'Message', id: number, from_customer?: boolean | null, text: string, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null };
+export type AddMessageMutation = { __typename?: 'RootMutation', addMessage?: { __typename: 'Message', id?: number | null, from_customer?: boolean | null, text?: string | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null };
 
 export type AddSettingMutationVariables = Exact<{
   setting: SettingInput;
@@ -295,6 +310,29 @@ export type AddSettingMutationVariables = Exact<{
 
 
 export type AddSettingMutation = { __typename?: 'RootMutation', addSetting?: { __typename?: 'Setting', callBack_url: string, ACCESS_TOKEN: string, APP_ID: string, APP_SECRET: string, PHONE_NUMBER_ID: string, BUSINESS_ACCOUNT_ID: string, API_VERSION: string, WEBHOOK_VERIFICATION_TOKEN: string, RECIPIENT_PHONE_NUMBER?: string | null } | null };
+
+export type CustomerChatSearchQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  text: Scalars['String']['input'];
+}>;
+
+
+export type CustomerChatSearchQuery = { __typename?: 'RootQuery', customerChatSearch?: { __typename?: 'CusChatSearch', customers?: Array<{ __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } | null> | null, chats?: Array<{ __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } } | null> | null } | null };
+
+export type CustomersSearchQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  text: Scalars['String']['input'];
+}>;
+
+
+export type CustomersSearchQuery = { __typename?: 'RootQuery', customersSearch?: Array<{ __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } | null> | null };
+
+export type GetCustomersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCustomersQuery = { __typename?: 'RootQuery', customers?: Array<{ __typename?: 'Customer', id: number, whatsapp_name?: string | null, first_name?: string | null, last_name?: string | null, phone_number: string } | null> | null };
 
 export type GetCustomerInfoQueryVariables = Exact<{
   customerId: Scalars['Int']['input'];
@@ -320,7 +358,7 @@ export type LastMessageQueryVariables = Exact<{
 }>;
 
 
-export type LastMessageQuery = { __typename?: 'RootQuery', lastMessage?: { __typename: 'Message', id: number, text: string, createdAt?: any | null, chat: { __typename: 'Chat', id?: number | null } } | null };
+export type LastMessageQuery = { __typename?: 'RootQuery', lastMessage?: { __typename: 'Message', id?: number | null, text?: string | null, createdAt?: any | null, chat: { __typename: 'Chat', id?: number | null } } | null };
 
 export type LoginMerchantMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -335,14 +373,14 @@ export type MessageAddedSubscriptionVariables = Exact<{
 }>;
 
 
-export type MessageAddedSubscription = { __typename?: 'RootSubscription', messageAdded?: { __typename?: 'ChatUpdatedType', message?: { __typename: 'Message', id: number, text: string, from_customer?: boolean | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename: 'Chat', id?: number | null } } | null, chat?: { __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, whatsapp_name?: string | null, phone_number: string, first_name?: string | null, last_name?: string | null }, messages: Array<{ __typename?: 'Message', id: number, from_customer?: boolean | null, text: string, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null } | null };
+export type MessageAddedSubscription = { __typename?: 'RootSubscription', messageAdded?: { __typename?: 'ChatUpdatedType', message?: { __typename: 'Message', id?: number | null, text?: string | null, from_customer?: boolean | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename: 'Chat', id?: number | null } } | null, chat?: { __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, whatsapp_name?: string | null, phone_number: string, first_name?: string | null, last_name?: string | null }, messages: Array<{ __typename?: 'Message', id?: number | null, from_customer?: boolean | null, text?: string | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null } | null };
 
 export type GetMessagesQueryVariables = Exact<{
   chatId: Scalars['Int']['input'];
 }>;
 
 
-export type GetMessagesQuery = { __typename?: 'RootQuery', chat?: { __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string }, messages: Array<{ __typename: 'Message', id: number, text: string, from_customer?: boolean | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null };
+export type GetMessagesQuery = { __typename?: 'RootQuery', chat?: { __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string }, messages: Array<{ __typename: 'Message', id?: number | null, text?: string | null, from_customer?: boolean | null, timestamp?: number | null, createdAt?: any | null, chat: { __typename?: 'Chat', id?: number | null } } | null> } | null };
 
 export type SignupMerchantMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -359,34 +397,29 @@ export type ChatAddedSubscriptionVariables = Exact<{
 }>;
 
 
-export type ChatAddedSubscription = { __typename?: 'RootSubscription', chatAdded?: { __typename?: 'Chat', id?: number | null, messages: Array<{ __typename: 'Message', id: number, text: string } | null> } | null };
+export type ChatAddedSubscription = { __typename?: 'RootSubscription', chatAdded?: { __typename?: 'Chat', id?: number | null, messages: Array<{ __typename: 'Message', id?: number | null, text?: string | null } | null> } | null };
 
 export type GetChatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetChatsQuery = { __typename?: 'RootQuery', chats?: Array<{ __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } } | null> | null };
 
-export type CustomersSearchQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  text: Scalars['String']['input'];
-}>;
-
-
-export type CustomersSearchQuery = { __typename?: 'RootQuery', customersSearch?: { __typename?: 'CusChatSearch', customers?: Array<{ __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } | null> | null, chats?: Array<{ __typename?: 'Chat', id?: number | null, customer: { __typename: 'Customer', id: number, first_name?: string | null, last_name?: string | null, phone_number: string } } | null> | null } | null };
-
 export type MerchantFragmentFragment = { __typename?: 'Merchant', username: string, business_name?: string | null } & { ' $fragmentName'?: 'MerchantFragmentFragment' };
 
-export type MessageFragmentFragment = { __typename?: 'Message', text: string, timestamp?: number | null, from_customer?: boolean | null, createdAt?: any | null } & { ' $fragmentName'?: 'MessageFragmentFragment' };
+export type MessageFragmentFragment = { __typename?: 'Message', text?: string | null, timestamp?: number | null, from_customer?: boolean | null, createdAt?: any | null } & { ' $fragmentName'?: 'MessageFragmentFragment' };
 
 export type CustomerFragmentFragment = { __typename?: 'Customer', first_name?: string | null, last_name?: string | null, phone_number: string } & { ' $fragmentName'?: 'CustomerFragmentFragment' };
 
 export const MerchantFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"merchantFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Merchant"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}}]}}]} as unknown as DocumentNode<MerchantFragmentFragment, unknown>;
 export const MessageFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"messageFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"from_customer"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageFragmentFragment, unknown>;
 export const CustomerFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"customerFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Customer"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}}]}}]} as unknown as DocumentNode<CustomerFragmentFragment, unknown>;
+export const AddCustomerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddCustomer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CustomerInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addCustomer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"customer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customer"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"whatsapp_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}}]}}]}}]} as unknown as DocumentNode<AddCustomerMutation, AddCustomerMutationVariables>;
 export const AddChatDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addChat"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"chat"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ChatInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addChat"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"chat"},"value":{"kind":"Variable","name":{"kind":"Name","value":"chat"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"whatsapp_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"from_customer"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"chat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<AddChatMutation, AddChatMutationVariables>;
 export const AddMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"message"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MessageInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"message"},"value":{"kind":"Variable","name":{"kind":"Name","value":"message"}}},{"kind":"Argument","name":{"kind":"Name","value":"customerId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"from_customer"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"chat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<AddMessageMutation, AddMessageMutationVariables>;
 export const AddSettingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addSetting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"setting"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SettingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addSetting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"setting"},"value":{"kind":"Variable","name":{"kind":"Name","value":"setting"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"callBack_url"}},{"kind":"Field","name":{"kind":"Name","value":"ACCESS_TOKEN"}},{"kind":"Field","name":{"kind":"Name","value":"APP_ID"}},{"kind":"Field","name":{"kind":"Name","value":"APP_SECRET"}},{"kind":"Field","name":{"kind":"Name","value":"PHONE_NUMBER_ID"}},{"kind":"Field","name":{"kind":"Name","value":"BUSINESS_ACCOUNT_ID"}},{"kind":"Field","name":{"kind":"Name","value":"ACCESS_TOKEN"}},{"kind":"Field","name":{"kind":"Name","value":"API_VERSION"}},{"kind":"Field","name":{"kind":"Name","value":"WEBHOOK_VERIFICATION_TOKEN"}},{"kind":"Field","name":{"kind":"Name","value":"RECIPIENT_PHONE_NUMBER"}}]}}]}}]} as unknown as DocumentNode<AddSettingMutation, AddSettingMutationVariables>;
+export const CustomerChatSearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomerChatSearch"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"text"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customerChatSearch"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"text"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"Field","name":{"kind":"Name","value":"chats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CustomerChatSearchQuery, CustomerChatSearchQueryVariables>;
+export const CustomersSearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomersSearch"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"text"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customersSearch"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"text"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<CustomersSearchQuery, CustomersSearchQueryVariables>;
+export const GetCustomersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"whatsapp_name"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}}]}}]}}]} as unknown as DocumentNode<GetCustomersQuery, GetCustomersQueryVariables>;
 export const GetCustomerInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomerInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"customerId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}}]}}]}}]} as unknown as DocumentNode<GetCustomerInfoQuery, GetCustomerInfoQueryVariables>;
 export const GetCurrentMerchantDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCurrentMerchant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentMerchant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"business_name"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]} as unknown as DocumentNode<GetCurrentMerchantQuery, GetCurrentMerchantQueryVariables>;
 export const GetSettingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSetting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"callBack_url"}},{"kind":"Field","name":{"kind":"Name","value":"APP_ID"}},{"kind":"Field","name":{"kind":"Name","value":"APP_SECRET"}},{"kind":"Field","name":{"kind":"Name","value":"PHONE_NUMBER_ID"}},{"kind":"Field","name":{"kind":"Name","value":"BUSINESS_ACCOUNT_ID"}},{"kind":"Field","name":{"kind":"Name","value":"ACCESS_TOKEN"}},{"kind":"Field","name":{"kind":"Name","value":"API_VERSION"}},{"kind":"Field","name":{"kind":"Name","value":"WEBHOOK_VERIFICATION_TOKEN"}},{"kind":"Field","name":{"kind":"Name","value":"RECIPIENT_PHONE_NUMBER"}}]}}]}}]} as unknown as DocumentNode<GetSettingQuery, GetSettingQueryVariables>;
@@ -397,4 +430,3 @@ export const GetMessagesDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const SignupMerchantDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"signupMerchant"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whatsapp_phone_number"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signupMerchant"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"whatsapp_phone_number"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whatsapp_phone_number"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<SignupMerchantMutation, SignupMerchantMutationVariables>;
 export const ChatAddedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"chatAdded"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"merchantId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chatAdded"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"merchantId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"merchantId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]} as unknown as DocumentNode<ChatAddedSubscription, ChatAddedSubscriptionVariables>;
 export const GetChatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]} as unknown as DocumentNode<GetChatsQuery, GetChatsQueryVariables>;
-export const CustomersSearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"customersSearch"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"text"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customersSearch"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"text"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"Field","name":{"kind":"Name","value":"chats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"phone_number"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CustomersSearchQuery, CustomersSearchQueryVariables>;

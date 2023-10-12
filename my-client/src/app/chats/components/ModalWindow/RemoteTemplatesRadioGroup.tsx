@@ -3,29 +3,29 @@ import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 
 const allTemplates = {
-    Marketing: ['template 1', 'template 2', 'template 3',
+    MARKETING: ['template 1', 'template 2', 'template 3',
         'template 4', 'template 5', 'template 6', 'template 7', 'template 8',
         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
         'template 15', 'template 16', 'template 17', 'template 18'],
-    Utility: ['template 7', 'template 8',
+    UTILITY: ['template 7', 'template 8',
         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
         'template 15', 'template 16', 'template 17', 'template 18'],
-    Authentication: ['template 18', 'template 8',
+    AUTHENTICATION: ['template 18', 'template 8',
         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
         'template 15', 'template 16', 'template 17'],
-    Service: [
+    SERVICE: [
         'template 11', 'template 12', 'template 13', 'template 14',
         'template 15', 'template 16', 'template 17'
     ]
 }
 
 type Props = {
-    type: string
+    category: string
 }
 
-function TemplateRadioGroup({ type }: Props) {
+function TemplateRadioGroup({ category }: Props) {
     //@ts-ignore
-    const templates: string[] = allTemplates[`${type}`]
+    const templates: string[] = allTemplates[`${category}`]
     let [template, setTemplate] = useState('')
 
     return (

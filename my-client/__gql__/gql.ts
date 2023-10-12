@@ -13,9 +13,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "mutation AddCustomer($customer: CustomerInput!) {\n  addCustomer(customer: $customer) {\n    whatsapp_name\n    phone_number\n    first_name\n    last_name\n  }\n}": types.AddCustomerDocument,
     "mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}": types.AddChatDocument,
     "mutation AddMessage($message: MessageInput!, $customerId: Int) {\n  addMessage(message: $message, customerId: $customerId) {\n    __typename\n    id\n    from_customer\n    text\n    timestamp\n    createdAt\n    chat {\n      id\n    }\n  }\n}": types.AddMessageDocument,
     "mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}": types.AddSettingDocument,
+    "query CustomerChatSearch($page: Int, $limit: Int, $text: String!) {\n  customerChatSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}": types.CustomerChatSearchDocument,
+    "query CustomersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    id\n    first_name\n    last_name\n    phone_number\n    __typename\n  }\n}": types.CustomersSearchDocument,
+    "query GetCustomers {\n  customers {\n    id\n    whatsapp_name\n    first_name\n    last_name\n    phone_number\n  }\n}": types.GetCustomersDocument,
     "query GetCustomerInfo($customerId: Int!) {\n  customer(customerId: $customerId) {\n    id\n    first_name\n    last_name\n    phone_number\n  }\n}": types.GetCustomerInfoDocument,
     "query GetCurrentMerchant {\n  currentMerchant {\n    id\n    business_name\n    username\n  }\n}": types.GetCurrentMerchantDocument,
     "query GetSetting($username: String) {\n  setting(username: $username) {\n    callBack_url\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}": types.GetSettingDocument,
@@ -26,7 +30,6 @@ const documents = {
     "mutation signupMerchant($username: String!, $password: String!, $email: String, $whatsapp_phone_number: String!) {\n  signupMerchant(\n    username: $username\n    password: $password\n    email: $email\n    whatsapp_phone_number: $whatsapp_phone_number\n  ) {\n    token\n  }\n}": types.SignupMerchantDocument,
     "subscription chatAdded($merchantId: Int) {\n  chatAdded(merchantId: $merchantId) {\n    id\n    messages {\n      id\n      text\n      __typename\n    }\n  }\n}": types.ChatAddedDocument,
     "query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}": types.GetChatsDocument,
-    "query customersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}": types.CustomersSearchDocument,
     "fragment merchantFragment on Merchant {\n  username\n  business_name\n}": types.MerchantFragmentFragmentDoc,
     "fragment messageFragment on Message {\n  text\n  timestamp\n  from_customer\n  createdAt\n}": types.MessageFragmentFragmentDoc,
     "fragment customerFragment on Customer {\n  first_name\n  last_name\n  phone_number\n}": types.CustomerFragmentFragmentDoc,
@@ -49,6 +52,10 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "mutation AddCustomer($customer: CustomerInput!) {\n  addCustomer(customer: $customer) {\n    whatsapp_name\n    phone_number\n    first_name\n    last_name\n  }\n}"): (typeof documents)["mutation AddCustomer($customer: CustomerInput!) {\n  addCustomer(customer: $customer) {\n    whatsapp_name\n    phone_number\n    first_name\n    last_name\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}"): (typeof documents)["mutation addChat($chat: ChatInput!) {\n  addChat(chat: $chat) {\n    id\n    customer {\n      id\n      whatsapp_name\n      phone_number\n      first_name\n      last_name\n      __typename\n    }\n    messages {\n      id\n      from_customer\n      text\n      timestamp\n      createdAt\n      chat {\n        id\n      }\n    }\n    __typename\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -58,6 +65,18 @@ export function gql(source: "mutation AddMessage($message: MessageInput!, $custo
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"): (typeof documents)["mutation addSetting($setting: SettingInput!) {\n  addSetting(setting: $setting) {\n    callBack_url\n    ACCESS_TOKEN\n    APP_ID\n    APP_SECRET\n    PHONE_NUMBER_ID\n    BUSINESS_ACCOUNT_ID\n    ACCESS_TOKEN\n    API_VERSION\n    WEBHOOK_VERIFICATION_TOKEN\n    RECIPIENT_PHONE_NUMBER\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query CustomerChatSearch($page: Int, $limit: Int, $text: String!) {\n  customerChatSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}"): (typeof documents)["query CustomerChatSearch($page: Int, $limit: Int, $text: String!) {\n  customerChatSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query CustomersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    id\n    first_name\n    last_name\n    phone_number\n    __typename\n  }\n}"): (typeof documents)["query CustomersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    id\n    first_name\n    last_name\n    phone_number\n    __typename\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query GetCustomers {\n  customers {\n    id\n    whatsapp_name\n    first_name\n    last_name\n    phone_number\n  }\n}"): (typeof documents)["query GetCustomers {\n  customers {\n    id\n    whatsapp_name\n    first_name\n    last_name\n    phone_number\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -98,10 +117,6 @@ export function gql(source: "subscription chatAdded($merchantId: Int) {\n  chatA
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"): (typeof documents)["query GetChats {\n  chats {\n    id\n    customer {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n  }\n}"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "query customersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}"): (typeof documents)["query customersSearch($page: Int, $limit: Int, $text: String!) {\n  customersSearch(page: $page, limit: $limit, text: $text) {\n    customers {\n      id\n      first_name\n      last_name\n      phone_number\n      __typename\n    }\n    chats {\n      id\n      customer {\n        id\n        first_name\n        last_name\n        phone_number\n        __typename\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,19 +1,19 @@
 'use client'
 import { ChangeEvent, useState, Suspense } from 'react'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { CustomerChatSearchDocument } from '../../../../__gql__/graphql'
+import { CustomersSearchDocument } from '../../../../__gql__/graphql'
 import { skipToken } from '@apollo/client'
-import CustomersList from './CustomersSearchList'
 import LoadingComponent from '@/app/components/LoadingComponent'
 import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import CustomersSearchList from './CustomersSearchList'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
-    const { data, } = useSuspenseQuery(CustomerChatSearchDocument,
+    const { data, } = useSuspenseQuery(CustomersSearchDocument,
         searchString.length > 2 ? { variables: { page: 0, limit: 5, text: searchString } } : skipToken)
 
-    const customers = data?.customerChatSearch?.customers
-    const chats = data?.customerChatSearch?.chats
+    const customers = data?.customersSearch
+    console.log(customers)
 
     // make a fetch call to render the search results
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,28 +26,22 @@ function ChatSearchBar() {
             <div className="flex justify-between items-center w-full">
                 <div className="absolute left-5 w-6 h-6">
                     {searchString
-                        ?<ArrowLeftIcon onClick={e => setSearchString('')} className='hover:text-green-500 text-green-600 corsor-pointer' />
+                        ? <ArrowLeftIcon onClick={e => setSearchString('')} className='hover:text-green-500 text-green-600 corsor-pointer' />
                         :
                         <MagnifyingGlassIcon />
                     }
                 </div>
                 <input className="outline-none bg-[#F0F2F5] rounded-md pl-8 py-1 w-full mr-2 dark:bg-gray-700 text-ellipsis"
-                    placeholder="Search or start new chat"
+                    placeholder="Search for a customer"
                     type="text"
                     value={searchString}
                     onChange={handleChange}
                 />
-                <div className="w-[40px] h-[40px] flex items-center">
-                    <svg viewBox="0 0 24 24" width="20" height="20" preserveAspectRatio="xMidYMid meet"
-                        className="relative">
-                        <path fill="#54656F" d="M10 18.1h4v-2h-4v2zm-7-12v2h18v-2H3zm3 7h12v-2H6v2z"></path>
-                    </svg>
-                </div>
             </div>
-            {(customers || chats) &&
+            {(customers) &&
                 <div className='relative w-[300px] md:w-[350px]'>
                     <Suspense fallback={<LoadingComponent />}>
-                        <CustomersList customers={customers} chats={chats} />
+                        <CustomersSearchList customers={customers}  />
                     </Suspense>
                 </div>
             }

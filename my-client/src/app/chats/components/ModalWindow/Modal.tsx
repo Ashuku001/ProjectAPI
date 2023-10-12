@@ -6,6 +6,7 @@ import { useReactiveVar } from '@apollo/client'
 import TemplateTabs from './RemoteTemplateType'
 
 
+
 function MyDialog() {
     // const [isOpen, closeModal] = useModal((state) => [state.isOpen, state.closeModal])
     let isOpen = useReactiveVar(useModal)[0]

@@ -1,7 +1,8 @@
-import React from 'react'
 import { listTemplates } from '@/lib/message-helper/getRemoteTemplates'
 import { Template } from '../../../types'
 import Image from 'next/image'
+import { getTemplatedMessageInput2 } from '@/lib/message-helper/message-helper'
+import { sendMessage } from '@/lib/message-helper/sendMessage'
 
 async function MyTemplates(request: Request) {
   const remoteTemplates: Template[] = await listTemplates()
@@ -17,9 +18,11 @@ async function MyTemplates(request: Request) {
 
   console.log("components", remoteTemplates[16])
 
+
   return (
     <>
       <div>
+        <button className='bg-white p-2' onClick={e => handleClick()}>Click me to send a message</button>
         <h1 className='text-2xl text-center'>Approved templates</h1>
         <hr className='w-[70%] my-3 bg-gray-300 dark:bg-gray-600' />
         <div className='flex space-x-10'>

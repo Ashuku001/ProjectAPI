@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Tab } from '@headlessui/react'
 import TemplateRadioGroup from './RemoteTemplatesRadioGroup'
 
-const tabTypes = ["Marketing", "Utility", "Authentication", "Service"]
+const categories = ["MARKETING", "UTILITY", "AUTHENTICATION", "SERVICE"]
 
 function TemplateTabs() {
 
@@ -16,7 +16,7 @@ function TemplateTabs() {
                 }}
             >
                 <Tab.List className={'flex space-x-1'}>
-                    {tabTypes.map((type, i) => (
+                    {categories.map((category, i) => (
                         <Tab as={Fragment} key={i}>
                             {({ selected }) => (
                                 /* Use the `selected` state to conditionally style the selected tab. */
@@ -25,16 +25,16 @@ function TemplateTabs() {
                                         `px-1 rounded-md ${selected ? 'bg-blue-500 text-white' : 'bg-transparent text-black'}`
                                     }
                                 >
-                                    {type}
+                                    {category.toLowerCase()}
                                 </button>
                             )}
                         </Tab>
                     ))}
                 </Tab.List>
                 <Tab.Panels>
-                    {tabTypes.map((type, i) => (
+                    {categories.map((category, i) => (
                         <Tab.Panel key={i} className={'h-full overflow-auto '}>
-                            <TemplateRadioGroup type={type} />
+                            <TemplateRadioGroup category={category} />
                         </Tab.Panel>
                     ))}
                 </Tab.Panels>
