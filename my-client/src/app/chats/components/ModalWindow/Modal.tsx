@@ -8,9 +8,7 @@ import TemplateTabs from './RemoteTemplateType'
 
 
 function MyDialog() {
-    // const [isOpen, closeModal] = useModal((state) => [state.isOpen, state.closeModal])
     let isOpen = useReactiveVar(useModal)[0]
-    console.log("IS OPEN VALUE", isOpen)
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

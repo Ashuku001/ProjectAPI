@@ -8,38 +8,14 @@ import { useEffect } from 'react'
 type Props = {
     customers?: (CustomerType)[] | null | undefined;
     chats?: (ChatType)[] | null;
+    searchString?: string;
 }
 
-function CustomersList({ customers, chats}: Props) {
+function CustomersList({ customers, chats, searchString }: Props) {
 
     const show = useReactiveVar(useShowSearchList)[0]
-    console.log("The search list display", show)
+    console.log("The search list display", useShowSearchList()[0])
     let content = null
-
-    if (customers || chats) {
-        content = <>
-            <div>
-                {chats?.length !== 0 &&
-                    <div>
-                        <h1 className="fond-bold text-center text-slate-400 text-[18px]">Chats</h1>
-                        {chats?.map((chat) => (
-                            <ChatComponent key={chat?.id} chat={chat} />
-                        ))}
-                    </div>
-                }
-            </div>
-            <div>
-                {customers?.length !== 0 &&
-                    <div className="flex flex-col mt-4">
-                        <h1 className="fond-bold text-center text-slate-400 text-[18px]">Customers</h1>
-                        {customers?.map((customer) => (
-                            <Customer key={customer?.id} customer={customer} />
-                        ))}
-                    </div>
-                }
-            </div>
-        </>
-    }
 
     const handleShow = (show: boolean) => {
         if (show) {
@@ -72,8 +48,35 @@ function CustomersList({ customers, chats}: Props) {
         }
     });
 
+
+    if (customers || chats) {
+        content = <>
+            <div>
+                {chats?.length !== 0 &&
+                    <div>
+                        <h1 className="fond-bold text-center text-slate-400 text-[18px]">Chats</h1>
+                        {chats?.map((chat) => (
+                            <ChatComponent key={chat?.id} chat={chat} />
+                        ))}
+                    </div>
+                }
+            </div>
+            <div>
+                {customers?.length !== 0 &&
+                    <div className="flex flex-col mt-4">
+                        <h1 className="fond-bold text-center text-slate-400 text-[18px]">Customers</h1>
+                        {customers?.map((customer) => (
+                            <Customer key={customer?.id} customer={customer} />
+                        ))}
+                    </div>
+                }
+            </div>
+        </>
+    }
+
     return (
-        <div className={`absolute top-0 right-[0] mx-auto px-2 bg-[#ffffff] dark:bg-gray-800 overflow-y-auto max-h-[70vh] w-full ${show ? '' : 'hidden'}`}>
+        // <div className={` ${useShowSearchList()[0] ? 'translate-y-0' : '-translate-y-full'} ease-in-out duration-300`}>
+        <div className={` ${useShowSearchList()[0] ? 'block' : ' hidden'}  transition-all ease-in-out duration-1000`}>
             {content}
         </div>
     )

@@ -1,27 +1,18 @@
 'use client'
-import { ChangeEvent, useState, Suspense } from 'react'
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import {  useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { CustomerChatSearchDocument } from '../../../../__gql__/graphql'
-import { skipToken } from '@apollo/client'
 import CustomersList from './CustomersSearchList'
 import LoadingComponent from '@/app/components/LoadingComponent'
 import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { useShowSearchList } from '@/app/cache/localStore'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
     const [getCusChats, { loading, error, data }] = useLazyQuery(CustomerChatSearchDocument)
-    // const { data } = useQuery(CustomerChatSearchDocument,
-    //     searchString.length > 2 ? { variables: { page: 0, limit: 5, text: searchString } } : skipToken)
 
     const customers = data?.customerChatSearch?.customers
     const chats = data?.customerChatSearch?.chats
-
-    // make a fetch call to render the search results
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setSearchString(e.target.value)
-    }
 
     return (
         <div className="lower-nav px-4 py-2 flex flex-col items-center relative  border-r-1">
@@ -40,6 +31,9 @@ function ChatSearchBar() {
                     onChange={e => {
                         e.preventDefault()
                         setSearchString(e.target.value)
+                        if (e.target.value === '') {
+                            useShowSearchList([false])
+                        }
                         if (searchString.length > 2) {
                             getCusChats({ variables: { page: 0, limit: 5, text: searchString } })
                         }
@@ -53,10 +47,12 @@ function ChatSearchBar() {
                 </div>
             </div>
             {(customers || chats || loading || error) &&
-                <div className='relative w-[300px] md:w-[350px]'>
-                    {loading && <LoadingComponent />}
-                    {error && <p className='text-center'>{error.message}</p>}
-                    <CustomersList customers={customers} chats={chats} />
+                <div className={`relative  w-[300px] md:w-[350px]`}>
+                    <div className={`absolute top-0 right-[0]  mx-auto px-2  bg-[#ffffff] dark:bg-gray-800 overflow-y-auto w-full border-r border-slate-400 `}>
+                        {loading && <div className={``}><LoadingComponent /></div>}
+                        {error && <p className={`text-center py-6`}>{error.message}</p>}
+                        <CustomersList customers={customers} chats={chats} searchString={searchString} />
+                    </div>
                 </div>
             }
         </div>

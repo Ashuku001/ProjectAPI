@@ -26,9 +26,23 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+@initial {
+  .popupdisplay{
+    @apply opacity-0
+  }
+}
+
 @layer components{
   .navLink {
     @apply hover:underline decoration-orange-400 text-center decoration-2  active:underline underline-offset-8 rounded-full p-4 cursor-pointer hover:font-bold capitalize hover:scale-110 transition-transform duration-200 ease-out;
+  }
+
+  .popuphidden {
+    @apply opacity-0 hidden transition-all ease-in-out duration-1000
+  }
+
+  .popupdisplay {
+    @apply opacity-100 block
   }
 }
 
