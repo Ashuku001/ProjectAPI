@@ -31,7 +31,7 @@ function ChatSearchBar() {
                         <MagnifyingGlassIcon />
                     }
                 </div>
-                <input className="outline-none bg-[#F0F2F5] rounded-md pl-8 py-1 w-full mr-2 dark:bg-gray-700 text-ellipsis"
+                <input className="w-full outline-none bg-[#F0F2F5] rounded-md pl-8 py-1 mr-2 dark:bg-gray-700 text-ellipsis"
                     placeholder="Search for a customer"
                     type="text"
                     value={searchString}

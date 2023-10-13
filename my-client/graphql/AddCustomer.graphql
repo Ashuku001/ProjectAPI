@@ -1,6 +1,7 @@
 mutation AddCustomer($customer: CustomerInput!){
     addCustomer(customer: $customer
     ){
+        id
         whatsapp_name
         phone_number
         first_name

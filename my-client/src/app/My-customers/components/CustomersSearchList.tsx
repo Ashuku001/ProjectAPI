@@ -1,6 +1,6 @@
 "use client"
-import Customer from "@/app/components/Customer"
 import { CustomerType } from "../../../../types"
+import Customer from "./Customer"
 
 type Props = {
     customers?: (CustomerType)[] | null | undefined;

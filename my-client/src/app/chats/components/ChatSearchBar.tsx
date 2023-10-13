@@ -1,6 +1,7 @@
 'use client'
 import { ChangeEvent, useState, Suspense } from 'react'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import { CustomerChatSearchDocument } from '../../../../__gql__/graphql'
 import { skipToken } from '@apollo/client'
 import CustomersList from './CustomersSearchList'
@@ -9,8 +10,9 @@ import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
-    const { data, } = useSuspenseQuery(CustomerChatSearchDocument,
-        searchString.length > 2 ? { variables: { page: 0, limit: 5, text: searchString } } : skipToken)
+    const [getCusChats, { loading, error, data }] = useLazyQuery(CustomerChatSearchDocument)
+    // const { data } = useQuery(CustomerChatSearchDocument,
+    //     searchString.length > 2 ? { variables: { page: 0, limit: 5, text: searchString } } : skipToken)
 
     const customers = data?.customerChatSearch?.customers
     const chats = data?.customerChatSearch?.chats
@@ -26,7 +28,7 @@ function ChatSearchBar() {
             <div className="flex justify-between items-center w-full">
                 <div className="absolute left-5 w-6 h-6">
                     {searchString
-                        ?<ArrowLeftIcon onClick={e => setSearchString('')} className='hover:text-green-500 text-green-600 corsor-pointer' />
+                        ? <ArrowLeftIcon onClick={e => setSearchString('')} className='hover:text-green-500 text-green-600 corsor-pointer' />
                         :
                         <MagnifyingGlassIcon />
                     }
@@ -35,7 +37,13 @@ function ChatSearchBar() {
                     placeholder="Search or start new chat"
                     type="text"
                     value={searchString}
-                    onChange={handleChange}
+                    onChange={e => {
+                        e.preventDefault()
+                        setSearchString(e.target.value)
+                        if (searchString.length > 2) {
+                            getCusChats({ variables: { page: 0, limit: 5, text: searchString } })
+                        }
+                    }}
                 />
                 <div className="w-[40px] h-[40px] flex items-center">
                     <svg viewBox="0 0 24 24" width="20" height="20" preserveAspectRatio="xMidYMid meet"
@@ -44,11 +52,11 @@ function ChatSearchBar() {
                     </svg>
                 </div>
             </div>
-            {(customers || chats) &&
+            {(customers || chats || loading || error) &&
                 <div className='relative w-[300px] md:w-[350px]'>
-                    <Suspense fallback={<LoadingComponent />}>
-                        <CustomersList customers={customers} chats={chats} />
-                    </Suspense>
+                    {loading && <LoadingComponent />}
+                    {error && <p className='text-center'>{error.message}</p>}
+                    <CustomersList customers={customers} chats={chats} />
                 </div>
             }
         </div>

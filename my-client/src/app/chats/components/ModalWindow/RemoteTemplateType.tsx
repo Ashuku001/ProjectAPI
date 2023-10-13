@@ -1,9 +1,8 @@
-
+'use client'
 import { Fragment } from 'react'
 import { Tab } from '@headlessui/react'
 import TemplateRadioGroup from './RemoteTemplatesRadioGroup'
-
-const categories = ["MARKETING", "UTILITY", "AUTHENTICATION", "SERVICE"]
+const categories = ["MARKETING", "UTILITY", "AUTHENTICATION"]
 
 function TemplateTabs() {
 

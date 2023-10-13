@@ -1,7 +1,7 @@
 "use client"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import { GetCustomersDocument } from "../../../../__gql__/graphql"
-import Customer from "@/app/components/Customer"
+import Customer from "./Customer"
 import { CustomerType } from "../../../../types"
 
 function CustomersList() {

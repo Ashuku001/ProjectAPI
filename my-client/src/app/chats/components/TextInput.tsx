@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { AddMessageDocument, GetMessagesDocument, AddChatDocument, GetChatsDocument } from '../../../../__gql__/graphql'
 import { CustomerType } from '../../../../types'
 import { useRouter } from 'next/navigation'
-import { useModal } from '../store/localStore'
+import { useModal } from '@/app/cache/localStore'
 
 type Props = {
     chatId: number | undefined;

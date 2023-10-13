@@ -1,36 +1,72 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { GetSettingDocument } from '../../../../../__gql__/graphql'
+import { listTemplates } from '@/lib/message-helper/getRemoteTemplates'
+import { SettingType } from '../../../../../types'
 
-const allTemplates = {
-    MARKETING: ['template 1', 'template 2', 'template 3',
-        'template 4', 'template 5', 'template 6', 'template 7', 'template 8',
-        'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
-        'template 15', 'template 16', 'template 17', 'template 18'],
-    UTILITY: ['template 7', 'template 8',
-        'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
-        'template 15', 'template 16', 'template 17', 'template 18'],
-    AUTHENTICATION: ['template 18', 'template 8',
-        'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
-        'template 15', 'template 16', 'template 17'],
-    SERVICE: [
-        'template 11', 'template 12', 'template 13', 'template 14',
-        'template 15', 'template 16', 'template 17'
-    ]
-}
+
+// const allTemplates = {
+//     MARKETING: ['template 1', 'template 2', 'template 3',
+//         'template 4', 'template 5', 'template 6', 'template 7', 'template 8',
+//         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
+//         'template 15', 'template 16', 'template 17', 'template 18'],
+//     UTILITY: ['template 7', 'template 8',
+//         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
+//         'template 15', 'template 16', 'template 17', 'template 18'],
+//     AUTHENTICATION: ['template 18', 'template 8',
+//         'template 9', 'template 10', 'template 11', 'template 12', 'template 13', 'template 14',
+//         'template 15', 'template 16', 'template 17'],
+//     SERVICE: [
+//         'template 11', 'template 12', 'template 13', 'template 14',
+//         'template 15', 'template 16', 'template 17'
+//     ]
+// }
 
 type Props = {
     category: string
 }
 
 function TemplateRadioGroup({ category }: Props) {
+    const { data } = useSuspenseQuery(GetSettingDocument)
+    const [remoteTemplates, setTemplates] = useState()
+    let [template, setTemplate] = useState('')
+    
+
+    const setting = data.setting
+    
+    let allTemplates = {}
+    
+    
+    console.log(setting)
+    console.log("Remote templates", typeof remoteTemplates)
+
+    //@ts-ignore
+    allTemplates["MARKETING"] = remoteTemplates?.filter((t) => t.category === 'MARKETING')
+    //@ts-ignore
+    allTemplates["UTILITY"] = remoteTemplates?.filter((t) => t.category === 'UTILITY')
+    //@ts-ignore
+    allTemplates["AUTHENTICATION"] = remoteTemplates?.filter((t) => t.category === 'AUTHENTICATION')
+    console.log(allTemplates)
     //@ts-ignore
     const templates: string[] = allTemplates[`${category}`]
-    let [template, setTemplate] = useState('')
+    console.log("Category templates", templates)
+
+
+    useEffect(() => {
+        const getTemplates = async () => {
+            const result = await listTemplates()
+            setTemplates(result)
+            console.log(result)
+            return
+        }
+        getTemplates()
+    }, [])
 
     return (
         <RadioGroup value={template} onChange={e => setTemplate(e)} className='sticky flex flex-col items-start h-full pr-1  py-1 overflow-y-auto'>
-            {templates.map((template) =>
+            {templates?.map((template) =>
                 <RadioGroup.Option
                     value={template}
                     className={({ active, checked }) =>
@@ -47,7 +83,8 @@ function TemplateRadioGroup({ category }: Props) {
                                         as='p'
                                         className={`font-medium ${checked ? "text-white" : "text-gray-500"}`}
                                     >
-                                        <span>{template}</span>
+                                        {/* @ts-ignore */}
+                                        <span>{template?.name?.replace('_', ' ')}</span>
                                     </RadioGroup.Label>
                                 </div>
                             </div>

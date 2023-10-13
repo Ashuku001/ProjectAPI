@@ -2,7 +2,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MessageAddedDocument } from "../../../../__gql__/graphql"
-import { FormEvent, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { LastMessageDocument } from "../../../../__gql__/graphql"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import TimeAgo from "react-timeago"
@@ -10,21 +10,25 @@ import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation"
 import { ChatType } from "../../../../types"
+import { useReactiveVar } from "@apollo/client"
+import { useIsSelected } from "../store/localStore"
 
 type Props = {
     chat: ChatType,
 }
 
-function ChatComponent({  chat }: Props) {
+function ChatComponent({ chat }: Props) {
     const { data, subscribeToMore } = useSuspenseQuery(
         LastMessageDocument,
         { variables: { chatId: (chat?.id as number) } })
     const router = useRouter()
+    const [selected, setSelected] = useState(false)
+    // let isSelected = useReactiveVar(useIsSelected)[0]
+    // console.log("Selected status", selected)
 
     const lastMessage = data?.lastMessage
 
     const subscribeNewLastMessage = () => {
-        console.log("In hewewe")
         subscribeToMore({
             document: MessageAddedDocument,
             variables: { chatId: (chat?.id as number) },
@@ -33,7 +37,6 @@ function ChatComponent({  chat }: Props) {
                     return prev
 
                 const newLastmessage = subscriptionData.data.messageAdded?.message
-                console.log("New last message inchat component", newLastmessage)
                 if (newLastmessage?.from_customer === true)
                     toast(newLastmessage?.text)
 
@@ -54,18 +57,20 @@ function ChatComponent({  chat }: Props) {
         })
     }
 
-    const handleClick = (chatId: number ) => {
+    const handleClick = (chatId: number) => {
         router.push(`/chats/${chatId}`)
+
     }
 
-    useEffect(() => subscribeNewLastMessage(), [])
+    useEffect(() => {subscribeNewLastMessage()}, [])
 
     return (
         <Link
+            onClick={e => handleClick}
             href={`/chats/${chat?.id}`}
-            className={`chatboxhover:bg-gray-400  dark:hover:bg-gray-700 cursor-pointer w-full ${chat?.id! <0 ? 'bg-red': ''}`}
+            className={`chatboxhover:bg-gray-400 cursor-pointer w-full `}
         >
-            <div className="flex items-center w-full">
+            <div className={`flex items-center w-full hover:bg-gray-200 dark:hover:bg-gray-700 ${chat?.id! < 0 ? 'bg-red' : ''} ${selected ? 'bg-white' : ''}`}>
                 <div className="p-3">
                     <Image
                         src={'/profile.jpg'}

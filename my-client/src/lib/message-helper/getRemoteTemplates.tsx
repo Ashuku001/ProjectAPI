@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 export async function listTemplates(){
     console.log("########")
-    const res = await fetch(`${process.env.URL}/api/get-remote-templates`, {
+    const res = await fetch(`http://localhost:3000/api/get-remote-templates`, {
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

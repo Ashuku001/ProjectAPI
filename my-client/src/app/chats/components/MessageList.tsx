@@ -1,10 +1,5 @@
 'use client'
-import { useEffect } from 'react'
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import MessageComponent from "./MessageComponent"
-import { GetMessagesDocument } from "../../../../__gql__/graphql"
-import { skipToken } from "@apollo/client"
-import { MessageAddedDocument } from "../../../../__gql__/graphql"
 import { MessageType } from '../../../../types'
 
 type Props = {

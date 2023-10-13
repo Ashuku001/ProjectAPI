@@ -1,10 +1,8 @@
 'use client'
-
 import { useMutation } from "@apollo/client"
 import { AddSettingDocument } from "../../../../__gql__/graphql"
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
-import { setEngine } from "crypto"
 
 
 function SettingsForm() {
@@ -62,7 +60,7 @@ function SettingsForm() {
 
   return (
     <div className="p-2 ">
-      <h1 className="text-2xl py-2 font-sans">Fill in the form to get a webhook endpoint</h1>
+      <h1 className="text-[18px] py-2 font-sans font-bold">Your whatsapp business account settings</h1>
       <form onSubmit={addSettingToDB} className="max-w-3xl font-sans font-bold">
         <label htmlFor="ACCESS_TOKEN">Access Token</label>
         <input onChange={e => setACCESSTOKEN(e.target.value)} type="text" placeholder='Access Token' name='ACCESS_TOKEN' id="ACCESS_TOKEN" className="bg-slate-200 dark:bg-gray-700 rounded-lg px-4 py-2 outline-none w-full flex-1 pr-8 cursor-auto mb-2" required />

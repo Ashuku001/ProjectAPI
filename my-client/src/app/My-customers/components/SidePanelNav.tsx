@@ -10,11 +10,11 @@ function SidePanelNav({ }: Props) {
     return (
         <div>
             {showAddForm
-                ? <div>
+                ? <div className="flex flex-col justify-center ">
                     <CustomerInput />
                     <button onClick={e => setShowAddForm(!showAddForm)}>or search</button>
                 </div>
-                : <div>
+                : <div className="flex flex-col justify-center ">
                     <CustomerSearch />
                     <button onClick={e => setShowAddForm(!showAddForm)}>or add a customer</button>
                 </div>

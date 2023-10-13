@@ -1,7 +1,7 @@
 'use client'
 import { FormEvent, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useModal } from '../../store/localStore'
+import { useModal } from '@/app/cache/localStore'
 import { useReactiveVar } from '@apollo/client'
 import TemplateTabs from './RemoteTemplateType'
 
@@ -38,8 +38,8 @@ function MyDialog() {
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className='fixed inset-0 '>
-                    <div className='flex min-h-[70v] fixed bottom-0 right-0 justify-center items-center px-2 md:px-10 text-center'>
+                <div className='fixed inset-0'>
+                    <div className='flex min-h-[70v] fixed bottom-0 right-0 justify-center items-center  px-0 md:px-10 text-center'>
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -55,7 +55,7 @@ function MyDialog() {
                                     Your active templates
                                 </Dialog.Description>
                                 <div className='w-full h-[55vh] overflow-y-hidden  flex flex-row'>
-                                    <TemplateTabs/>
+                                    <TemplateTabs />
                                     <div className='flex-1 p-2 w-[50%]'>
                                         <h1 className='text-center'>The preview</h1>
                                         <div>

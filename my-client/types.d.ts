@@ -72,3 +72,16 @@ type MessageType = {
         id?: number | undefined;
     };
 } | null
+
+type SettingType = {
+    __typename?: "Setting" | undefined;
+    callBack_url: string;
+    APP_ID: string;
+    APP_SECRET: string;
+    PHONE_NUMBER_ID: string;
+    BUSINESS_ACCOUNT_ID: string;
+    ACCESS_TOKEN: string;
+    API_VERSION: string;
+    WEBHOOK_VERIFICATION_TOKEN: string;
+    RECIPIENT_PHONE_NUMBER?: string | undefined;
+} | null | undefined
