@@ -10,7 +10,9 @@ import { ChatType } from '../../../../types'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
-    const [getCusChats, { loading, error, data }] = useLazyQuery(CustomerChatSearchDocument)
+    const [getCusChats, { loading, error, data }] = useLazyQuery(CustomerChatSearchDocument, {
+        fetchPolicy: "no-cache"
+    })
 
     const customers = data?.customerChatSearch?.customers
     const chats = data?.customerChatSearch?.chats
@@ -37,7 +39,7 @@ function ChatSearchBar() {
                         }
                         if (e.target.value === '') {
                             // eslint-disable-next-line react-hooks/rules-of-hooks
-                            useShowSearchList([false])
+                            useShowSearchList(false)
                         }
 
                     }}
@@ -55,7 +57,7 @@ function ChatSearchBar() {
                     {loading && <div className={`py-20`}><LoadingComponent /></div>}
                     {error && <p className={`text-center py-20  ${searchString.length === 0 ? 'hidden' : ''}`}>{error.message}</p>}
                     {(customers || chats) &&
-                        <CustomersList customers={customers} chats={chats as ChatType[]}/>
+                        <CustomersList customers={customers} chats={chats as ChatType[]} />
                     }
                 </div>
             </div>
