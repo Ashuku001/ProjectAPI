@@ -1,5 +1,4 @@
 "use client";
-
 import { ApolloLink, HttpLink, gql, split } from "@apollo/client";
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
@@ -12,12 +11,14 @@ import {
     SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { setContext } from '@apollo/client/link/context'
+import { isLoggedInVar, merchantId } from "@/app/cache/cache";
 
 
 // client schema
 const typeDefs = gql`
     extend type Query {
-        isModalOpen: Boolean!
+        isLoggedIn: Boolean!
+        merchantId: Int!
     }
 
 `
@@ -81,7 +82,24 @@ function makeClient() {
     return new NextSSRApolloClient({
         connectToDevTools: true,
         // the caching that we use is Next specific not the normal inMemoryCache
-        cache: new NextSSRInMemoryCache({}),
+        cache: new NextSSRInMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        isLoggedIn: {
+                            read() {
+                                return isLoggedInVar();
+                            }
+                        },
+                        merchantId: {
+                            read() {
+                                return merchantId()
+                            }
+                        }
+                    }
+                }
+            }
+        }),
 
         // if on the server and if undefined
         link:

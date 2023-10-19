@@ -4,5 +4,6 @@ query GetCustomerInfo($customerId: Int!) {
     first_name
     last_name
     phone_number
+    __typename
   }
 }

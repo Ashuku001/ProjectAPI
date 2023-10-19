@@ -55,7 +55,7 @@ function SettingsForm() {
     setRECIPIENT_PHONE_NUMBER("")
 
 
-    router.push(`Settings/${RECIPIENT_PHONE_NUMBER}`)
+    router.push(`/Settings/${RECIPIENT_PHONE_NUMBER}`)
   }
 
   return (

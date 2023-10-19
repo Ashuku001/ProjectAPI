@@ -1,20 +1,48 @@
+'use client'
 import { listTemplates } from '@/lib/message-helper/getRemoteTemplates'
-import { Template } from '../../../types'
 import Image from 'next/image'
+import { useQuery } from '@apollo/client'
+import { GetSettingDocument } from '../../../__gql__/graphql'
+import { useEffect, useState } from 'react'
+import { ComponentObj, PreviewObj, RemoteTemplateObj, SettingType } from '../../../types'
+import Input from 'postcss/lib/input'
+import { templatePreviewObj } from '@/lib/generateTemplatePreview/tempalatePreviewObject'
+import { templatePreviewUI } from '@/lib/generateTemplatePreview/templatePreviewUI'
+import Template from './components/Template'
 
-async function MyTemplates(request: Request) {
-  const remoteTemplates: Template[] = await listTemplates()
+function MyTemplates(request: Request) {
+  const { data, loading, error } = useQuery(GetSettingDocument)
+  const [remoteTemplates, setTemplates] = useState<RemoteTemplateObj[]>()
 
-  const approvedTemplates = remoteTemplates.filter((t) => t.status === 'APPROVED')
-  const appMarketingTemplates = approvedTemplates.filter((t) => t.category === 'MARKETING')
-  const appUtilitiyTemplates = approvedTemplates.filter((t) => t.category === 'UTILITY')
-  const appAuthenticationTemplates = approvedTemplates.filter((t) => t.category === 'MARKETING')
-  const inReviewTemplates = remoteTemplates.filter((t) => t.status === 'APPROVED')
-  const rejectedTemplates = remoteTemplates.filter((t) => t.status === 'REJECTED')
+  const setting = data?.setting
 
-  console.log("REMOTE TEMPLATES", remoteTemplates)
 
-  console.log("components", remoteTemplates[16])
+  const approvedTemplates = remoteTemplates?.filter((t) => t.status === 'APPROVED')
+  const appMarketingTemplates = approvedTemplates?.filter((t) => t.category === 'MARKETING')
+  const appUtilitiyTemplates = approvedTemplates?.filter((t) => t.category === 'UTILITY')
+  const appAuthenticationTemplates = approvedTemplates?.filter((t) => t.category === 'AUTHENTICATION')
+  const inReviewTemplates = remoteTemplates?.filter((t) => t.status === 'REVIEW')
+  const rejectedTemplates = remoteTemplates?.filter((t) => t.status === 'REJECTED')
+
+  // console.log("REMOTE TEMPLATES", remoteTemplates)
+
+  // if (remoteTemplates) {
+  //   // console.log("components", remoteTemplates[16])
+  //   console.log("#############marketing###################", remoteTemplates)
+  //   remoteTemplates.forEach((template) => {
+  //     templatePreviewUI((templatePreviewObj(template) as unknown) as PreviewObj)
+  //   })
+  // }
+
+  useEffect(() => {
+    const getTemplates = async () => {
+      const result = await listTemplates(setting as SettingType)
+      setTemplates(result)
+      // console.log(result)
+      return
+    }
+    getTemplates()
+  }, [loading])
 
 
   return (
@@ -27,24 +55,19 @@ async function MyTemplates(request: Request) {
             <h1 className='text-[20px] font-bold'>Marketing templates</h1>
             <hr className='w-[20%] my-2' />
             <div>
-              {appMarketingTemplates.map((t, i) => (
-                <div key={t.id}>
-                  <div>{t.name.replace('_', ' ')}</div>
-                  <div className=' border border-gray-100 rounded-md max-w-[250px] h-auto p-2'>
-                    {/* @ts-ignore */}
-                    {t.components.map((c, i) => (
-                      <div key={i}>
-                        {/* @ts-ignore */}
-                        {c.type === 'HEADER' && c.format === "IMAGE" && <Image className='w-full' src='/sample.jpg' alt={"Image"} width={200} height={100}/>}
-                        {/* @ts-ignore */}
-                        {c.type === 'HEADER' && c.format === "DOCUMENT" && <h1>DOCUMENT</h1>}
-                        {/* @ts-ignore */}
-                        {c.type === 'HEADER' && c.format === "TEXT" && <h1>TEXT</h1>}
-                        {/* @ts-ignore */}
-                        {c.type === 'BODY' && <div>{c.text}</div>}
-                      </div>
-                    )
-                    )}
+              {appMarketingTemplates?.map((template) => (
+                <div key={template.id}>
+                  <div>{template.name.replace('_', ' ')}</div>
+                  <div className=' border border-gray-100 rounded-md max-w-[250px] md:max-w-[350px] h-auto p-2'>
+                    <div>
+                      {template.components.map((c, i) => (
+                        <div key={i}>
+                          {c.type === 'BUTTONS' && <div className='font-extralight font-1xl text-gray-200'>{"buttons"}</div>}
+                        </div>
+                      )
+                      )}
+                    </div>
+                    <Template template={template} />
                   </div>
                 </div>
               ))}
@@ -54,24 +77,11 @@ async function MyTemplates(request: Request) {
             <h1 className='text-[20px] font-bold'>Utility</h1>
             <hr className='w-[20%] my-2' />
             <div>
-              {appUtilitiyTemplates.map((t, i) => (
-                <div key={t.id}>
-                  <div>{t.name.replace('_', ' ')}</div>
-                  <div className=' border border-gray-100 rounded-md max-w-[250px] h-auto p-2'>
-                    {/* @ts-ignore */}
-                    {t.components.map((c, i) => (
-                      <div key={i}>
-                        {/* @ts-ignore */}
-                        {c.type === 'IMAGE' && <Image src='/public/sample.jpg' />}
-                        {/* @ts-ignore */}
-                        {c.type === 'BODY' && <div>{c.text}</div>}
-                        {/* @ts-ignore */}
-                        {c.type === 'BUTTONS' && <div className='font-extralight font-1xl text-gray-200'>{"buttons"}</div>}
-                        {/* @ts-ignore */}
-                        {c.type === 'FOOTER' && <div className='font-extralight font-1xl text-gray-200'>{c.text}</div>}
-                      </div>
-                    )
-                    )}
+              {appUtilitiyTemplates?.map((template, i) => (
+                <div key={template.id}>
+                  <div>{template.name.replace('_', ' ')}</div>
+                  <div className=' border border-gray-100 rounded-md max-w-[250px] md:max-w-[350px]  h-auto p-2'>
+                    <Template template={template} />
                   </div>
                 </div>
 
@@ -84,7 +94,7 @@ async function MyTemplates(request: Request) {
       <div>
         <h1 className='text-2xl'>Rejected templates</h1>
         <div className='text-red-300'>
-          {rejectedTemplates.map((t, i) => (
+          {rejectedTemplates?.map((t, i) => (
             <div key={t.id}>{t.name.replace('_', ' ')}</div>
           ))}
         </div>

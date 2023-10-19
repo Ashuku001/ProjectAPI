@@ -17,7 +17,7 @@ function TemplateRadioGroup({ category }: Props) {
     const [remoteTemplates, setTemplates] = useState()
 
     // make this type generic
-    let [template, setTemplate] = useState<Type>()
+    let [template, setTemplate] = useState()
     console.log("Selected template",template)
 
 

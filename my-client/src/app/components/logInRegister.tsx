@@ -4,16 +4,17 @@ import { LoginMerchantDocument, SignupMerchantDocument } from '../../../__gql__/
 import { useMutation } from '@apollo/client';
 import ErrorComponent from './ErrorComponent';
 import LoadingComponent from './LoadingComponent';
+import { isLoggedInVar, merchantId } from '../cache/cache';
 
 type LoginFormProps = {
     changeLoginState: Dispatch<SetStateAction<boolean>>
 }
 
-const LoginForm = ({ changeLoginState }: LoginFormProps) => {
+const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const [loginMerchant, { data, loading, error }] = useMutation(LoginMerchantDocument)
+    const [loginMerchant, {data, loading, error }] = useMutation(LoginMerchantDocument)
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,10 +22,15 @@ const LoginForm = ({ changeLoginState }: LoginFormProps) => {
         loginMerchant({
             //@ts-ignore
             update(cache, { data: { loginMerchant } }) {
-                if (loginMerchant.token) {
-                    localStorage.setItem('jwt', loginMerchant.token);
-                    changeLoginState(true);
 
+                console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$4",loginMerchant)
+                if (loginMerchant.token && loginMerchant.merchant.id) {
+                    localStorage.setItem('jwt', loginMerchant.token);
+                    localStorage.setItem('merchantId', loginMerchant.merchant.id)
+                    // changeLoginState(true);
+                    isLoggedInVar(true)
+                    merchantId(loginMerchant.merchant.id)
+                    console.log("merchant id", merchantId(), loginMerchant.merchant.id)
                 }
             },
             variables: { username, password }
@@ -63,7 +69,7 @@ const LoginForm = ({ changeLoginState }: LoginFormProps) => {
     )
 }
 
-const RegisterForm = ({ changeLoginState }: LoginFormProps) => {
+const RegisterForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [whatsapp_phone_number, setWhatsapp_phone_number] = useState('')
@@ -77,7 +83,7 @@ const RegisterForm = ({ changeLoginState }: LoginFormProps) => {
                 if (signupMerchant.token) {
                     console.log("In here")
                     localStorage.setItem('jwt', signupMerchant.token);
-                    changeLoginState(true);
+                    isLoggedInVar(true)
                 }
             },
             variables: { username, whatsapp_phone_number, password }
@@ -128,7 +134,7 @@ const RegisterForm = ({ changeLoginState }: LoginFormProps) => {
     )
 }
 
-const LoginRegisterForm = ({ changeLoginState }: LoginFormProps) => {
+const LoginRegisterForm = () => {
     const [showLogin, setShowLogin] = useState<boolean>(true)
 
     return (
@@ -136,11 +142,11 @@ const LoginRegisterForm = ({ changeLoginState }: LoginFormProps) => {
             {showLogin
                 ?
                 <div className='text-center'>
-                    <LoginForm changeLoginState={changeLoginState} />
+                    <LoginForm  />
                     <button className='text-blue-400' onClick={e => setShowLogin(false)}>Or sign up </button>
                 </div>
                 : <div className='text-center'>
-                    <RegisterForm changeLoginState={changeLoginState} />
+                    <RegisterForm/>
                     <button onClick={e => setShowLogin(true)} className='text-blue-400'>Or login</button>
                 </div>
             }

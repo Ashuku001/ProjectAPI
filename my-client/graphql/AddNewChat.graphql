@@ -9,15 +9,11 @@ mutation addChat($chat: ChatInput!) {
       last_name
       __typename
     }
-    messages {
+    lastMessage {
       id
-      from_customer
-      text
-      timestamp
       createdAt
-      chat {
-        id
-      }
+      text
+      __typename
     }
     __typename
   }

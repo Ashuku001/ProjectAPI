@@ -10,5 +10,6 @@ mutation addSetting($setting: SettingInput!){
         API_VERSION
         WEBHOOK_VERIFICATION_TOKEN
         RECIPIENT_PHONE_NUMBER
+        __typename
     }
 }

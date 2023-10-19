@@ -8,5 +8,6 @@ query GetChats {
       phone_number
       __typename
     }
+    __typename
   }
 }

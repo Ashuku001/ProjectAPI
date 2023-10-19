@@ -9,7 +9,7 @@ export async function POST(request: Request, res: Response) {
   const { setting } = await request.json()
   let data
   if (setting) {
-    console.log("In api route", setting)
+    // console.log("In api route", setting)
     try {
       const res = await fetch(
         `https://graph.facebook.com/${setting.API_VERSION}/${setting.BUSINESS_ACCOUNT_ID}/message_templates`

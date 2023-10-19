@@ -1,11 +1,12 @@
 'use client'
-import {  useState } from 'react'
+import { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { CustomerChatSearchDocument } from '../../../../__gql__/graphql'
 import CustomersList from './CustomersSearchList'
 import LoadingComponent from '@/app/components/LoadingComponent'
 import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { useShowSearchList } from '@/app/cache/localStore'
+import { useShowSearchList } from '@/app/cache/cache'
+import { ChatType } from '../../../../types'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
@@ -31,12 +32,14 @@ function ChatSearchBar() {
                     onChange={e => {
                         e.preventDefault()
                         setSearchString(e.target.value)
-                        if (e.target.value === '') {
-                            useShowSearchList([false])
-                        }
                         if (searchString.length > 2) {
                             getCusChats({ variables: { page: 0, limit: 5, text: searchString } })
                         }
+                        if (e.target.value === '') {
+                            // eslint-disable-next-line react-hooks/rules-of-hooks
+                            useShowSearchList([false])
+                        }
+
                     }}
                 />
                 <div className="w-[40px] h-[40px] flex items-center">
@@ -46,15 +49,17 @@ function ChatSearchBar() {
                     </svg>
                 </div>
             </div>
-            {(customers || chats || loading || error) &&
-                <div className={`relative  w-[300px] md:w-[350px]`}>
-                    <div className={`absolute top-0 right-[0]  mx-auto px-2  bg-[#ffffff] dark:bg-gray-800 overflow-y-auto w-full border-r border-slate-400 `}>
-                        {loading && <div className={``}><LoadingComponent /></div>}
-                        {error && <p className={`text-center py-6`}>{error.message}</p>}
-                        <CustomersList customers={customers} chats={chats} searchString={searchString} />
-                    </div>
+
+            <div className={`relative  w-[300px] md:w-[350px]`}>
+                <div className={`absolute top-0 right-[0]  mx-auto px-2  bg-[#ffffff] dark:bg-gray-800 overflow-y-auto w-full border-r border-slate-400 `}>
+                    {loading && <div className={`py-20`}><LoadingComponent /></div>}
+                    {error && <p className={`text-center py-20  ${searchString.length === 0 ? 'hidden' : ''}`}>{error.message}</p>}
+                    {(customers || chats) &&
+                        <CustomersList customers={customers} chats={chats as ChatType[]}/>
+                    }
                 </div>
-            }
+            </div>
+
         </div>
     )
 }

@@ -2,21 +2,18 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MessageAddedDocument, LastMessageDocument } from "../../../../__gql__/graphql"
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { useEffect } from "react"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import TimeAgo from "react-timeago"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { ChatType } from "../../../../types"
-import {  useCustomerId } from "@/app/cache/cache"
 
 type Props = {
     chat: ChatType,
-    activeChat: [number, Dispatch<SetStateAction<number>>]
 }
 
-function ChatComponent({ chat, activeChat }: Props) {
-    let [openedChat, setOpenedChat] = activeChat
+function ChatSearchComponent({ chat }: Props) {
     const { data, subscribeToMore } = useSuspenseQuery(
         LastMessageDocument,
         { variables: { chatId: (chat?.id as number) } })
@@ -63,10 +60,9 @@ function ChatComponent({ chat, activeChat }: Props) {
             href={`/chats/${chat?.id}`}
             className={`chatboxhover:bg-gray-400 cursor-pointer w-full `}
             onClick={(e) => {
-                setOpenedChat(chat?.id as number)
             }}
         >
-            <div className={`flex items-center w-full hover:bg-gray-200 dark:hover:bg-gray-700 ${chat?.id! < 0 ? 'bg-red' : ''} ${chat?.id === openedChat ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
+            <div className={`flex items-center w-full hover:bg-gray-200 dark:hover:bg-gray-700 ${chat?.id! < 0 ? 'bg-red' : ''} `}>
                 <div className="p-3">
                     <Image
                         src={'/profile.jpg'}
@@ -97,4 +93,4 @@ function ChatComponent({ chat, activeChat }: Props) {
     )
 }
 
-export default ChatComponent
+export default ChatSearchComponent

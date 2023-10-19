@@ -12,26 +12,5 @@ subscription messageAdded($chatId: Int!) {
       }
       __typename
     }
-    chat {
-      id
-      customer {
-        id
-        whatsapp_name
-        phone_number
-        first_name
-        last_name
-        __typename
-      }
-      messages {
-        id
-        from_customer
-        text
-        timestamp
-        createdAt
-        chat {
-          id
-        }
-      }
-    }
   }
 }

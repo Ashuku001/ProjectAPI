@@ -1,23 +1,22 @@
 import { ChatType, CustomerType } from "../../../../types";
 import Customer from "./Customer";
-import ChatComponent from "./ChatComponent";
+import ChatSearchComponent from "./ChatSearchComponent";
 import { useReactiveVar } from "@apollo/client";
-import { useShowSearchList } from "@/app/cache/localStore";
-import { useEffect } from 'react'
+import { useShowSearchList } from "@/app/cache/cache";
+import { useEffect, useCallback } from 'react'
 
 type Props = {
     customers?: (CustomerType)[] | null | undefined;
     chats?: (ChatType)[] | null;
-    searchString?: string;
 }
 
-function CustomersList({ customers, chats, searchString }: Props) {
+function CustomersList({ customers, chats }: Props) {
 
-    const show = useReactiveVar(useShowSearchList)[0]
-    console.log("The search list display", useShowSearchList()[0])
+    const show = useReactiveVar(useShowSearchList)
+    console.log("The search list display", useShowSearchList())
     let content = null
 
-    const handleShow = (show: boolean) => {
+    const handleShow = useCallback((show: boolean) => {
         if (show) {
             document.addEventListener('click',
                 handleShow.bind(null, !show), true);
@@ -25,20 +24,21 @@ function CustomersList({ customers, chats, searchString }: Props) {
             document.removeEventListener('click',
                 handleShow.bind(null, !show), true);
         }
-        useShowSearchList([show]);
-    }
-
-    const showList = (customers: CustomerType[]) => {
-        if (customers?.length) {
-            handleShow(true);
-        } else {
-            handleShow(false);
-        }
-    }
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useShowSearchList(show);
+    }, [])
 
     useEffect(() => {
+        const showList = (customers: CustomerType[]) => {
+            if (customers?.length || chats?.length) {
+                handleShow(true);
+            } else {
+                handleShow(false);
+            }
+        }
+
         showList(customers as CustomerType[]);
-    }, [customers]);
+    }, [customers?.length, chats?.length, customers, handleShow]);
 
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function CustomersList({ customers, chats, searchString }: Props) {
                     <div>
                         <h1 className="fond-bold text-center text-slate-400 text-[18px]">Chats</h1>
                         {chats?.map((chat) => (
-                            <ChatComponent key={chat?.id} chat={chat} />
+                            <ChatSearchComponent key={chat?.id} chat={chat} />
                         ))}
                     </div>
                 }
@@ -75,8 +75,8 @@ function CustomersList({ customers, chats, searchString }: Props) {
     }
 
     return (
-        // <div className={` ${useShowSearchList()[0] ? 'translate-y-0' : '-translate-y-full'} ease-in-out duration-300`}>
-        <div className={` ${useShowSearchList()[0] ? 'block' : ' hidden'}  transition-all ease-in-out duration-1000`}>
+        // <div className={` ${useShowSearchList() ? 'translate-y-0' : '-translate-y-full'} ease-in-out duration-300`}>
+        <div className={` ${useShowSearchList() ? '' : ' hidden'}  transition-all ease-in-out duration-1000 h-[79.5vh]`}>
             {content}
         </div>
     )

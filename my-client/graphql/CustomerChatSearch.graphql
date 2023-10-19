@@ -17,6 +17,13 @@ query CustomerChatSearch($page: Int, $limit: Int, $text: String!) {
         phone_number
         __typename
       }
+      lastMessage {
+        id
+        createdAt
+        text
+        __typename
+      }
+      __typename
     }
   }
 }

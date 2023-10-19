@@ -31,11 +31,25 @@ type LoginFormProps = {
 
 type CustomerType = {
     __typename: "Customer";
-    id?: number | null | undefined;
+    id: number;
     first_name?: string | null | undefined;
     last_name?: string | null | undefined;
-    phone_number: string;
-} | null | undefined
+    phone_number?: string | null | undefined;
+} | null
+
+
+type ChatAddedType = {
+    __typename?: "Chat" | undefined;
+    id?: number | null | undefined;
+    customer: {
+        __typename: "Customer";
+        id: number;
+        first_name?: string | null | undefined;
+        last_name?: string | null | undefined;
+        phone_number: string;
+    };
+} | null
+
 
 type ChatType = {
     __typename?: "Chat" | undefined;
@@ -52,10 +66,6 @@ type ChatType = {
         id?: number | undefined;
         text: string;
         createdAt?: any | null;
-        chat: {
-            __typename?: 'Chat';
-            id?: number | null;
-        };
     } | null | undefined;
 } | null | undefined
 
@@ -84,4 +94,65 @@ type SettingType = {
     API_VERSION: string;
     WEBHOOK_VERIFICATION_TOKEN: string;
     RECIPIENT_PHONE_NUMBER?: string | undefined;
+} | null | undefined
+
+type RemoteTemplateObj = {
+    category: string;
+    name: string;
+    language: string;
+    status: string;
+    id: string;
+    components: ComponentObj[]
+}
+
+interface PreviewObj {
+    HEADER?: PrevContent;
+    BODY?: PrevContent;
+    FOOTER?: PrevContent;
+    BUTTONS?: PrevContent;
+}
+
+interface PrevContent {
+    static?: StaticInput;
+    dynamic?: DynamicContent
+}
+
+interface StaticContet {
+    [key: string]: any
+}
+
+interface StaticInput {
+    type?: string;
+    format?: string;
+    content?: StaticContet;
+}
+
+interface DynamicContent {
+    type?: string;
+    format?: string;
+    content?: StaticContet;
+    inputs?: InputElement[]
+}
+
+interface ComponentObj {
+    [key: string]: any
+    type: string
+}
+
+interface InputElement {
+    type: string;
+    placeholder?: string;
+}
+
+type AddMessageType = {
+    __typename: "Message";
+    id: number;
+    from_customer: boolean;
+    text: string;
+    timestamp: number;
+    createdAt: any;
+    chat: {
+        __typename: "Chat";
+        id: number;
+    };
 } | null | undefined

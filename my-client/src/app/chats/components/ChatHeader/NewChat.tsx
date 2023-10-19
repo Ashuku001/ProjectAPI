@@ -1,11 +1,17 @@
-import Image from 'next/image'
-import { CustomerType } from '../../../../types';
+'use client'
+import { skipToken, useSuspenseQuery } from "@apollo/client";
+import Image from "next/image"
+import { GetCustomerInfoDocument } from "../../../../../__gql__/graphql";
 
-type Props = {
-    customer: CustomerType | undefined
+type Prop2 = {
+    customerId: number
 }
 
-function ChatHeader({ customer }: Props) {
+function NewChat({ customerId }: Prop2) {
+    const { data } = useSuspenseQuery(GetCustomerInfoDocument, (customerId && customerId > 0) ? { variables: { customerId: customerId } } : skipToken
+    );
+    const customer = data?.customer
+
     return (
         <div className='flex justify-between items-center w-full cursor-pointer'>
             <div className='flex justify-between items-center space-x-4'>
@@ -21,7 +27,7 @@ function ChatHeader({ customer }: Props) {
                         : customer?.phone_number
                     }
                     </p>
-                    <p className='font-sans font-medium text-base line-clamp-1'>Online status see how?</p>
+                    <p className='font-sans font-medium text-base line-clamp-1'>Online status see how? {customer?.id}</p>
                 </div>
             </div>
             <div className="flex justify-between items-center">
@@ -36,4 +42,4 @@ function ChatHeader({ customer }: Props) {
     )
 }
 
-export default ChatHeader
+export default NewChat

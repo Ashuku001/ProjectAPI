@@ -24,18 +24,18 @@ const product = {
     quantity: "30",
 }
 
-
+ {/* @ts-ignore */}
 export function getTemplatedMessageInput(recipient:string, product) {
     return JSON.stringify({
         "messaging_product": "whatsapp",
         "to": recipient,
         "type": "template",
         "template": {
-            "name": "new_arrival_product",
+            "name": "new_arrival_product",  // from the selected template we have the name
             "language": {
-                "code": "en_US"
+                "code": "en_US"  // the template has a language
             },
-            "components": [
+            "components": [       // dynamically figure out this components
                 {
                     "type": "header",
                     "parameters": [

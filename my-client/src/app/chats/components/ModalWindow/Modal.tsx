@@ -1,14 +1,14 @@
 'use client'
 import { FormEvent, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useModal } from '@/app/cache/localStore'
+import { activateModal } from '@/app/cache/cache'
 import { useReactiveVar } from '@apollo/client'
 import TemplateTabs from './RemoteTemplateType'
 
 
 
 function MyDialog() {
-    let isOpen = useReactiveVar(useModal)[0]
+    let isOpen = useReactiveVar(activateModal)[0]
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -20,7 +20,7 @@ function MyDialog() {
             <Dialog
                 as="form" className={"relative z-10"}
                 onSubmit={handleSubmit}
-                onClose={e => useModal([false])}>
+                onClose={e => activateModal([false])}>
                 {/*
           Use one Transition.Child to apply one transition to the backdrop...
         */}
@@ -62,8 +62,8 @@ function MyDialog() {
                                     </div>
                                 </div>
                                 <div className='flex justify-between items-center'>
-                                    <button onClick={() => useModal([false])} className='inline-flex justify-center rounded-md border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focust-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed'>Cancel</button>
-                                    <button onClick={() => useModal([false])} className='inline-flex justify-center rounded-md border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focust-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed'>Send</button>
+                                    <button onClick={() => activateModal([false])} className='inline-flex justify-center rounded-md border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focust-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed'>Cancel</button>
+                                    <button onClick={() => activateModal([false])} className='inline-flex justify-center rounded-md border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focust-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed'>Send</button>
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
@@ -79,8 +79,8 @@ export default MyDialog
 
 
 // function MyDialog() {
-//     // const [isOpen, closeModal] = useModal((state) => [state.isOpen, state.closeModal])
-//     let isOpen = useReactiveVar(useModal)[0]
+//     // const [isOpen, closeModal] = activateModal((state) => [state.isOpen, state.closeModal])
+//     let isOpen = useReactiveVar(activateModal)[0]
 //     console.log("IS OPEN VALUE", isOpen)
 
 //     return (
@@ -94,7 +94,7 @@ export default MyDialog
 //                 leaveFrom="opacity-100 scale-100"
 //                 leaveTo="opacity-0 scale-95"
 //             >
-//                 <Dialog as='form' open={isOpen} onClose={() => useModal([false])} className={'relative z-10'} >
+//                 <Dialog as='form' open={isOpen} onClose={() => activateModal([false])} className={'relative z-10'} >
 //                     {/* transition the backdrop */}
 //                     <Transition.Child
 //                         as={Fragment}
@@ -143,8 +143,8 @@ export default MyDialog
 //         </div>
 //     </div>
 //     <div className='flex justify-between items-center'>
-//         <button onClick={() => useModal([false])}>Cancel</button>
-//         <button onClick={() => useModal([false])}>Send</button>
+//         <button onClick={() => activateModal([false])}>Cancel</button>
+//         <button onClick={() => activateModal([false])}>Send</button>
 //     </div>
 // </Dialog.Panel>
 //                 </Dialog>

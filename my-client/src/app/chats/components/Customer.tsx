@@ -1,24 +1,29 @@
 import Image from "next/image"
 import { CustomerType } from "../../../../types"
 import Link from "next/link"
+import { reactiveChatId, useCustomerId } from "@/app/cache/cache"
+
 
 type Props = {
     customer: CustomerType
 }
 
+function Customer({ customer }: Props) {
 
-function Customer({customer}:Props) {
-    
     return (
         <div className="flex flex-col">
             <div>
                 <Link
                     className="flex items-center"
                     href={{
-                        pathname: `/chats/${undefined}`,
+                        pathname: `/chats/${-100}`,
                         query: {
-                            customer_id: customer?.id
+                            customerId: customer?.id
                         }
+                    }}
+                    onClick={(e) => {
+                        // eslint-disable-next-line react-hooks/rules-of-hooks
+                        reactiveChatId(-100)
                     }}
                 >
                     <div className="p-3">

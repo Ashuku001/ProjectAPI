@@ -1,5 +1,8 @@
 mutation loginMerchant($username: String!, $password: String!){
     loginMerchant(username: $username password: $password){
         token
+        merchant {
+            id
+        }
     }
 }

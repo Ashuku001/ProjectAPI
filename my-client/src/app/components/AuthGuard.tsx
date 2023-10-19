@@ -1,24 +1,27 @@
 'use client'
+import { gql, useQuery } from '@apollo/client';
 import LoginRegisterForm from './logInRegister'
 import { useEffect, useState } from 'react'
-import { useMerchantId } from '../globalStore'
+
 interface GuardProps {
   children: React.ReactNode
 }
 
-function AuthGuard({ children }: GuardProps) {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false) // check if we have a jwt in local storate
+const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
 
-  useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('jwt'))
-  }, [])
-  
+function AuthGuard({ children }: GuardProps) {
+  const {data} = useQuery(IS_LOGGED_IN)
+
 
   return (
     <>
-    {loggedIn ? (
+    {data.isLoggedIn ? (
       children
-    ) : <LoginRegisterForm changeLoginState={setLoggedIn}/>}
+    ) : <LoginRegisterForm/>}
     </>
   )
 }

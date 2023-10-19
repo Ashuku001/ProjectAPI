@@ -3,6 +3,6 @@ query GetCurrentMerchant{
         id
         business_name
         username
-
+        __typename
     }
 }
