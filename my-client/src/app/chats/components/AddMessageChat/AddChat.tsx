@@ -1,24 +1,24 @@
 'use client'
 import { FormEvent, useEffect, useState } from "react"
-import {  AddMessageDocument, GetMessagesDocument } from "../../../../../__gql__/graphql"
+import { AddMessageDocument, GetMessagesDocument } from "../../../../../__gql__/graphql"
 import { useMutation, } from "@apollo/client"
 import { activateModal, reactiveChatId } from "@/app/cache/cache"
 import { useGetMerchantIdQuery } from "../../../../../graphql/hooks/useGetMerchantId"
-import { useRouter } from "next/navigation"
 
-type Prop2 = {
+type Props = {
     id: number
 }
 
-function AddChat({ id }: Prop2) {
+function AddChat({ id }: Props) {
     const [customerId, setCustomerId] = useState(id)
+    const [prevNewChatId, setChatId] = useState(-100)
     const [textInput, setTextInput] = useState('')
-    const [addMessage, {loading: addMesLoad, error: addMesError, data: addMesData}] = useMutation(AddMessageDocument)
-    const {data: tempId} = useGetMerchantIdQuery()
+    const [addMessage, { loading: addMesLoad, error: addMesError, data: addMesData }] = useMutation(AddMessageDocument)
+    const { data: tempId } = useGetMerchantIdQuery()
     const merchantId = tempId.merchantId
-    const router = useRouter()
 
     console.log("In adding new chat", textInput, merchantId)
+    console.log("In addchat component state id", prevNewChatId, "from mutation id", addMesData?.addMessage?.chat.id  )
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -32,28 +32,31 @@ function AddChat({ id }: Prop2) {
                     },
                     customerId: customerId
                 },
-    
+
                 //@ts-ignore
                 update(cache, { data: { addMessage } }) {
-                    const data = cache.readQuery({ query: GetMessagesDocument, variables: { chatId: (addMesData?.addMessage?.chat.id as number) } });
-    
-                    console.log("data before adding message", data)
-                    if (data === null) {
-    
+                    if (prevNewChatId !== (addMesData?.addMessage?.chat.id as number)) {
+
+                        const data = cache.readQuery({ query: GetMessagesDocument, variables: { chatId: (addMesData?.addMessage?.chat.id as number) } });
+
+                        console.log("data before adding message", data)
+                        if (data === null) {
+
+                        }
+                        if (!data?.chat?.messages?.find((msg) => msg?.id === addMessage?.id)) {
+                            console.log("in here adding", addMessage, (addMesData?.addMessage?.chat.id as number), prevNewChatId)
+                            // add the messae from the mutation to the end
+                            // Object.assign({}, data, {
+                            //     chat: {
+                            //         messages: [addMessage, ...data?.chat?.messages!]
+                            //     }
+
+                            // });
+                            data?.chat?.messages?.push(addMessage)
+                        }
+                        console.log("new data after adding message", data)
+                        cache.writeQuery({ query: GetMessagesDocument, data: data });
                     }
-                    if (!data?.chat?.messages?.find((msg) => msg?.id === addMessage?.id)) {
-                        console.log("in here adding", addMessage,  (addMesData?.addMessage?.chat.id as number))
-                        // add the messae from the mutation to the end
-                        // Object.assign({}, data, {
-                        //     chat: {
-                        //         messages: [addMessage, ...data?.chat?.messages!]
-                        //     }
-    
-                        // });
-                        data?.chat?.messages?.push(addMessage)
-                    }
-                    console.log("new data after adding message", data)
-                    cache.writeQuery({ query: GetMessagesDocument, data: data });
                 },
                 optimisticResponse: {
                     addMessage: {
@@ -63,14 +66,14 @@ function AddChat({ id }: Prop2) {
                         timestamp: (new Date()).getTime(),
                         createdAt: new Date(),
                         chat: {
-                            id:  (addMesData?.addMessage?.chat.id as number),
+                            id: (addMesData?.addMessage?.chat.id as number),
                             __typename: "Chat"
                         },
                         __typename: "Message"
                     }
-    
+
                 },
-    
+
             }).then(() => {
                 setTextInput("")
             })
@@ -78,21 +81,23 @@ function AddChat({ id }: Prop2) {
     }
 
     useEffect(() => {
-        if (customerId !== id && id > 1 && customerId > 0) {
-            setCustomerId(id)
+        setCustomerId(id || -100)
+        if (addMesData?.addMessage?.chat.id && addMesData?.addMessage?.chat.id !== prevNewChatId) {
+            console.log("In here doing my thing", addMesData?.addMessage?.chat.id , prevNewChatId)
+            setChatId(addMesData?.addMessage?.chat.id as number)
+            reactiveChatId(addMesData?.addMessage?.chat.id)
+        } else {
+            // setChatId(-100)
         }
-    }, [id, customerId])
 
-    if(addMesError){
+        // return () => {
+        //     reactiveChatId(-100)
+        // }
+    }, [id, customerId, addMesData, prevNewChatId])
+
+    if (addMesError) {
         console.log(addMesError)
         return <div>{addMesError.message}</div>
-    }
-    if(addMesLoad){
-
-    }
-    if(addMesData){
-        reactiveChatId(addMesData.addMessage?.chat.id)
-        // router.push(`/chats/${addMesData.addMessage?.chat.id}`)
     }
 
     return (

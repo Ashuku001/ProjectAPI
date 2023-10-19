@@ -55,7 +55,7 @@ function ChatList() {
             })
         }
         subscribeToNewChats()
-    }, [subscribeToMore])
+    }, [merchantId, subscribeToMore])
 
 
 

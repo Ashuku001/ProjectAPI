@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { CustomerType } from "../../../../types"
 import Link from "next/link"
-import { reactiveChatId, useCustomerId } from "@/app/cache/cache"
+import { reactiveChatId } from "@/app/cache/cache"
 
 
 type Props = {
@@ -22,7 +22,6 @@ function Customer({ customer }: Props) {
                         }
                     }}
                     onClick={(e) => {
-                        // eslint-disable-next-line react-hooks/rules-of-hooks
                         reactiveChatId(-100)
                     }}
                 >

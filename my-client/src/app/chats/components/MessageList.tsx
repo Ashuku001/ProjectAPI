@@ -12,27 +12,18 @@ type Props = {
 }
 
 function MessageList({ id }: Props) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
+  // when a new chat is created cause a rerender of this component
   let tempId = useReactiveVar(reactiveChatId)
-  console.log("chat id in chat list%%%%%%%%", tempId, " and id ", id)
+  console.log("chat id in messages list%%%%%%%% reactivie chat", tempId, " and id chat id", id)
 
-  // if(!tempId || typeof tempId === null || typeof tempId === undefined){
-  //   // eslint-disable-next-line react-hooks/rules-of-hooks
-  //   tempId = useReactiveVar(reactiveChatId)
-  //   // eslint-disable-next-line react-hooks/rules-of-hooks
-  //   console.log('using ther reactivE variable', tempId, useReactiveVar(reactiveChatId))
-  // } else {
-  //   reactiveChatId(-100)
-  // }
+  const [chatId, setChatId] = useState(id);
 
-  const [chatId, setChatId] = useState(id)
-
-  let messages = undefined
+  let messages = undefined;
 
   const { data, subscribeToMore } = useSuspenseQuery(
     GetMessagesDocument,
-    (chatId && chatId > 1) ? { variables: { chatId: (chatId as number) } } : skipToken
-  );
+    (chatId && chatId > 1) ? { variables: { chatId: (chatId as number) } } : skipToken);
   messages = data?.chat?.messages
 
 
@@ -64,11 +55,16 @@ function MessageList({ id }: Props) {
     }
     subscribeToNewMessaes()
 
-    if(id > 0  && id !== 0){
+    // id from props
+    if(id > 0  && id !== undefined){
       setChatId(id)
-      reactiveChatId(-100)
     } else {
+      // the new chat id
       setChatId(tempId)
+    }
+
+    return () => {
+      setChatId(-100)
     }
   }, [subscribeToMore, chatId, id, tempId])
 
