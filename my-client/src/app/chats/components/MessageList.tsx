@@ -39,7 +39,7 @@ function MessageList({ id }: Props) {
 
           const newMessage = subscriptionData.data.messageAdded?.message
           if (newMessage) {
-            if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
+            if (!prev?.chat?.messages?.find((msg) => msg?.id === newMessage?.id)) {
               return Object.assign({}, prev, {
                 chat: {
                   messages: [newMessage, ...prev?.chat?.messages!],

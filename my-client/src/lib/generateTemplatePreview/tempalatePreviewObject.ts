@@ -1,9 +1,4 @@
-import { PrevContent, PreviewObj, RemoteTemplateObj, StaticButton } from "../../../types"
-
-interface InputElement {
-  type: string;
-  placeholder?: string;
-}
+import { PrevContent, PreviewObj, RemoteTemplateObj,  InputElement } from "../../../types"
 
 export const templatePreviewObj = (template: RemoteTemplateObj) => {
 
@@ -17,7 +12,7 @@ export const templatePreviewObj = (template: RemoteTemplateObj) => {
       let content: PrevContent = {}
       if (component.example) {
         let inputs: InputElement[] = []
-        inputs.push({ type: component.format === 'TEXT' ? 'text' : 'file', placeholder: `${component.example.header_text}`})
+        inputs.push({ type: component.format === 'TEXT' ? 'text' : 'file', id: `var1`, name: 'var1', placeholder: `${component.example.header_text}`})
         const { example, ...rest1 } = component
         const { type, ...rest2 } = rest1
         const { format, ...rest3 } = rest2
@@ -36,7 +31,7 @@ export const templatePreviewObj = (template: RemoteTemplateObj) => {
         let inputs: InputElement[] = []
         if (component.example.body_text[0].length !== 0) {
           for (let i = 0; i < component.example.body_text[0].length; i++) {
-            inputs.push({ type: 'text', placeholder: `${component.example.body_text[0][i]}` })
+            inputs.push({ type: 'text', id: `var${i}`, name: `var${i}`, placeholder: `${component.example.body_text[0][i]}` })
           }
         }
         const { example, ...rest } = component

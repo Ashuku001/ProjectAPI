@@ -17,6 +17,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.4.3",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "formik": "^2.4.5",
     "graphql-ws": "^5.14.1",
     "html-react-parser": "^4.2.2",
     "next": "^13.5.1",

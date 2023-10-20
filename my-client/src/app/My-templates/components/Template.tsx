@@ -1,13 +1,13 @@
 import { RemoteTemplateObj, StaticButton, StaticContent } from '../../../../types'
 import { templatePreviewObj } from '@/lib/generateTemplatePreview/tempalatePreviewObject'
 // import { templatePreviewUI } from '@/lib/generateTemplatePreview/templatePreviewUI'
-import parser from 'html-react-parser'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import DynamicHeader from './DynamicHeader'
 import TextDynamicHeader from './TextDynamicHeader'
 import DynamicBody from './DynamicBody'
-import { PhoneIcon } from '@heroicons/react/24/outline'
+import { PhoneIcon, GlobeAltIcon } from '@heroicons/react/24/outline'
 import HTMLReactParser from 'html-react-parser'
+import { useFormik } from 'formik'
 
 type Props = {
   template: RemoteTemplateObj
@@ -17,9 +17,13 @@ interface IconsType {
   [key: string]: any
 }
 
+interface BodyInputsState {
+  [key: string]: any
+}
+
 function Template({ template }: Props) {
   const imagePickerRef = useRef<HTMLInputElement>(null)
-  const icons: IconsType  = { PHONE_NUMBER: <PhoneIcon className='h-4 w-4' />, URL: "URL icon", QUICK_REPLY: "" }
+  const icons: IconsType  = { PHONE_NUMBER: <PhoneIcon className='h-4 w-4 mr-2' />, URL: <GlobeAltIcon className='h-4 w-4 mr-2'/>, QUICK_REPLY: "" }
 
   const content = templatePreviewObj(template)
   const header = content?.HEADER
@@ -27,7 +31,23 @@ function Template({ template }: Props) {
   const footer = content?.FOOTER
   const buttons = content?.BUTTONS
 
-  console.log("%%%%%%%%%%%%%%%%%%%%5",buttons)
+  let initialBodyState: BodyInputsState = {}
+  let formik = undefined 
+
+  if(body?.dynamic?.inputs?.length !== 0){
+    body?.dynamic?.inputs?.map((input) => {
+      initialBodyState[`${input.id}`] = ''
+    })
+  }
+
+  formik = useFormik({
+    initialValues: initialBodyState,
+    onSubmit: values => {
+      alert(JSON.stringify(values, null, 2))
+    }
+  })
+
+  console.log("%%%%%%%%%%%%%%%%%%%%%%%%body state",initialBodyState)
   return (
     <div>
       {header !== undefined &&
@@ -69,11 +89,11 @@ function Template({ template }: Props) {
             </>
           }
           {body?.dynamic !== undefined &&
-            <>
+            <form onSubmit={formik.handleSubmit}>
               {body?.dynamic?.content !== undefined &&
-                <DynamicBody dynamic={body?.dynamic} />
+                <DynamicBody dynamic={body?.dynamic} formik={formik}/>
               }
-            </>
+            </form>
           }
         </>
       }

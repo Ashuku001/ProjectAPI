@@ -148,6 +148,8 @@ interface ComponentObj {
 interface InputElement {
     type: string;
     placeholder?: string;
+    id?: string;
+    name?: string;
 }
 
 type AddMessageType = {

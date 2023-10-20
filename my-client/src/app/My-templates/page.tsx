@@ -55,14 +55,6 @@ function MyTemplates(request: Request) {
                 <div key={template.id}>
                   <div>{template.name.replace('_', ' ')}</div>
                   <div className=' border border-gray-100 rounded-md max-w-[250px] md:max-w-[350px] h-auto p-2'>
-                    <div>
-                      {template.components.map((c, i) => (
-                        <div key={i}>
-                          {c.type === 'BUTTONS' && <div className='font-extralight font-1xl text-gray-200'>{"buttons"}</div>}
-                        </div>
-                      )
-                      )}
-                    </div>
                     <Template template={template} />
                   </div>
                 </div>
