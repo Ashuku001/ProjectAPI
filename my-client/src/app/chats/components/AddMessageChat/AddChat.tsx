@@ -4,6 +4,7 @@ import { AddMessageDocument, GetMessagesDocument } from "../../../../../__gql__/
 import { useMutation, } from "@apollo/client"
 import { activateModal, reactiveChatId } from "@/app/cache/cache"
 import { useGetMerchantIdQuery } from "../../../../../graphql/hooks/useGetMerchantId"
+import secureLocalStorage from 'react-secure-storage'
 
 type Props = {
     id: number
@@ -13,9 +14,11 @@ function AddChat({ id }: Props) {
     const [customerId, setCustomerId] = useState(id)
     const [prevNewChatId, setChatId] = useState(-100)
     const [textInput, setTextInput] = useState('')
-    const [addMessage, { loading: addMesLoad, error: addMesError, data: addMesData }] = useMutation(AddMessageDocument)
-    const { data: tempId } = useGetMerchantIdQuery()
-    const merchantId = tempId.merchantId
+    const [addMessage, { loading, error: addMesError, data: addMesData }] = useMutation(AddMessageDocument)
+    // const { data: tempId } = useGetMerchantIdQuery()
+    // const merchantId = tempId.merchantId
+    const merchantId = parseInt(secureLocalStorage.getItem('merchantId') as string)
+
 
     console.log("In adding new chat", textInput, merchantId)
     console.log("In addchat component state id", prevNewChatId, "from mutation id", addMesData?.addMessage?.chat.id  )

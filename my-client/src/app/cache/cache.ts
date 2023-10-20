@@ -5,13 +5,14 @@ let id: any = typeof window!==undefined ? window.localStorage.getItem('merchantI
 if(id){
     id = parseInt(id)
 }
+export const merchantId = makeVar<number>(id)
 
 export const isLoggedInVar = makeVar<boolean>(typeof window!==undefined ? !! window.localStorage.getItem('jwt') : false)
-export const merchantId = makeVar<number>(id)
+
+export const reactiveChatId = makeVar<number>(-100)
 
 export const activateModal = makeVar([false])
 export const useShowSearchList = makeVar<boolean>(false)
 export const useIsSelected = makeVar([false])
 export const useSelectedTemplate = makeVar([])
-export const reactiveChatId = makeVar<number>(-100)
 export const useCustomerId = makeVar<number[]>([-100])

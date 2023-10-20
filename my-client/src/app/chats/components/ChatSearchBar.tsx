@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { CustomerChatSearchDocument } from '../../../../__gql__/graphql'
 import CustomersList from './CustomersSearchList'
-import LoadingComponent from '@/app/components/LoadingComponent'
 import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useShowSearchList } from '@/app/cache/cache'
 import { ChatType } from '../../../../types'
+import LoadingChatHeader from './LoadingChatHeader'
 
 function ChatSearchBar() {
     const [searchString, setSearchString] = useState('')
@@ -54,7 +54,12 @@ function ChatSearchBar() {
 
             <div className={`relative  w-[300px] md:w-[350px]`}>
                 <div className={`absolute top-0 right-[0]  mx-auto px-2  bg-[#ffffff] dark:bg-gray-800 overflow-y-auto w-full border-r border-slate-400 `}>
-                    {loading && <div className={`py-20`}><LoadingComponent /></div>}
+                    {loading && <div className={`py-2 mb-[60vh] flex flex-col space-y-2`}>
+                        <LoadingChatHeader />
+                        <LoadingChatHeader />
+                        <LoadingChatHeader />
+                        <LoadingChatHeader />
+                    </div>}
                     {error && <p className={`text-center py-20  ${searchString.length === 0 ? 'hidden' : ''}`}>{error.message}</p>}
                     {(customers || chats) &&
                         <CustomersList customers={customers} chats={chats as ChatType[]} />

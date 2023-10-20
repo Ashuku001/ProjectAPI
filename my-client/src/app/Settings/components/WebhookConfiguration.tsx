@@ -1,6 +1,4 @@
 'use client'
-import { GetSettingDocument } from "../../../../__gql__/graphql"
-import { useSuspenseQuery } from "@apollo/client"
 import { SettingType } from "../../../../types"
 
 type Props = {
@@ -9,6 +7,7 @@ type Props = {
 
 
 function WebhookConfiguration({ setting }: Props) {
+    
     return (
         <div>
             <div>

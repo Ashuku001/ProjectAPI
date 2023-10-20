@@ -3,7 +3,7 @@ import { ChangeEvent, useState, Suspense } from 'react'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { CustomersSearchDocument } from '../../../../__gql__/graphql'
 import { skipToken } from '@apollo/client'
-import LoadingComponent from '@/app/components/LoadingComponent'
+import LoadingComponent from '@/app/components/LoadingSpinner'
 import { ArrowLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import CustomersSearchList from './CustomersSearchList'
 

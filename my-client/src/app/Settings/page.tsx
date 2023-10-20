@@ -4,8 +4,10 @@ import { useSuspenseQuery } from "@apollo/client"
 import WebhookConfiguration from "./components/WebhookConfiguration"
 import { SettingType } from "../../../types"
 
-function page() {
-  const { data } = useSuspenseQuery(GetSettingDocument)
+function Page() {
+  const { data } = useSuspenseQuery(GetSettingDocument, {
+    fetchPolicy: "no-cache"
+  })
 
   const setting = data.setting
   return (
@@ -27,4 +29,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

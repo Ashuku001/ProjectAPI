@@ -3,8 +3,9 @@ import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { LoginMerchantDocument, SignupMerchantDocument } from '../../../__gql__/graphql';
 import { useMutation } from '@apollo/client';
 import ErrorComponent from './ErrorComponent';
-import LoadingComponent from './LoadingComponent';
+import LoadingComponent from './LoadingSpinner';
 import { isLoggedInVar, merchantId } from '../cache/cache';
+import secureLocalStorage from 'react-secure-storage';
 
 type LoginFormProps = {
     changeLoginState: Dispatch<SetStateAction<boolean>>
@@ -26,7 +27,7 @@ const LoginForm = () => {
                 console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$4",loginMerchant)
                 if (loginMerchant.token && loginMerchant.merchant.id) {
                     localStorage.setItem('jwt', loginMerchant.token);
-                    localStorage.setItem('merchantId', loginMerchant.merchant.id)
+                    secureLocalStorage.setItem('merchantId', loginMerchant.merchant.id)
                     // changeLoginState(true);
                     isLoggedInVar(true)
                     merchantId(loginMerchant.merchant.id)
@@ -82,7 +83,7 @@ const RegisterForm = () => {
             update(cache, { data: { signupMerchant} }) {
                 if (signupMerchant.token) {
                     console.log("In here")
-                    localStorage.setItem('jwt', signupMerchant.token);
+                    secureLocalStorage.setItem('jwt', signupMerchant.token);
                     isLoggedInVar(true)
                 }
             },

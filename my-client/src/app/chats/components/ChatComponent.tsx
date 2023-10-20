@@ -2,24 +2,25 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MessageAddedDocument, LastMessageDocument } from "../../../../__gql__/graphql"
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import TimeAgo from "react-timeago"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { ChatType } from "../../../../types"
-import {  useCustomerId } from "@/app/cache/cache"
 
 type Props = {
-    chat: ChatType,
-    activeChat: [number, Dispatch<SetStateAction<number>>]
+    chat: ChatType
+    activeChat:  [number, Dispatch<SetStateAction<number>>]
 }
 
 function ChatComponent({ chat, activeChat }: Props) {
-    let [openedChat, setOpenedChat] = activeChat
+    let [isOpen, setIsOpen] = activeChat
     const { data, subscribeToMore } = useSuspenseQuery(
         LastMessageDocument,
         { variables: { chatId: (chat?.id as number) } })
+    console.log("Active chat in componen%%%%%%%%%%%%%%%%%%%%%t", isOpen)
+    console.log("Active chat in componen%%%%%%%%%%%%%%%%%%%%%t", typeof isOpen, typeof chat?.id)
 
     const lastMessage = data?.lastMessage
 
@@ -56,17 +57,19 @@ function ChatComponent({ chat, activeChat }: Props) {
             })
         }
         subscribeNewLastMessage()
-    }, [chat?.id, subscribeToMore])
+        setIsOpen(parseInt(localStorage.getItem('activeChat') as string))
+    }, [chat?.id, setIsOpen, subscribeToMore])
 
     return (
         <Link
             href={`/chats/${chat?.id}`}
-            className={`chatboxhover:bg-gray-400 cursor-pointer w-full `}
+            className={`chatboxhover:bg-gray-400 cursor-pointer w-full h-20 `}
             onClick={(e) => {
-                setOpenedChat(chat?.id as number)
+                localStorage.setItem('activeChat', `${chat?.id}` || '')
+                setIsOpen(parseInt(localStorage.getItem('activeChat') as string))
             }}
         >
-            <div className={`flex items-center w-full hover:bg-gray-200 dark:hover:bg-gray-700 ${chat?.id! < 0 ? 'bg-red' : ''} ${chat?.id === openedChat ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
+            <div className={`flex items-center w-full hover:bg-gray-200 dark:hover:bg-gray-700 ${chat?.id! < 0 ? 'bg-red' : ''} ${chat?.id === isOpen ? 'bg-gray-200 dark:bg-gray-700' : ''} h-18`}>
                 <div className="p-3">
                     <Image
                         src={'/profile.jpg'}

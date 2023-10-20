@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client'
 import { GetSettingDocument } from '../../../../../__gql__/graphql'
 import { listTemplates } from '@/lib/message-helper/getRemoteTemplates'
 import { SettingType } from '../../../../../types'
-import LoadingComponent from '@/app/components/LoadingComponent'
+import LoadingComponent from '@/app/components/LoadingSpinner'
 
 
 type Props = {

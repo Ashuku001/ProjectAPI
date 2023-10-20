@@ -3,7 +3,8 @@ import Customer from "./Customer";
 import ChatSearchComponent from "./ChatSearchComponent";
 import { useReactiveVar } from "@apollo/client";
 import { useShowSearchList } from "@/app/cache/cache";
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, Suspense } from 'react'
+import LoadingChatHeader from "./LoadingChatHeader";
 
 type Props = {
     customers?: (CustomerType)[] | null | undefined;
@@ -56,7 +57,9 @@ function CustomersList({ customers, chats }: Props) {
                     <div>
                         <h1 className="fond-bold text-center text-slate-400 text-[18px]">Chats</h1>
                         {chats?.map((chat) => (
-                            <ChatSearchComponent key={chat?.id} chat={chat} />
+                            <Suspense key={chat?.id} fallback={<LoadingChatHeader />}>
+                                <ChatSearchComponent chat={chat} />
+                            </Suspense>
                         ))}
                     </div>
                 }
@@ -66,7 +69,9 @@ function CustomersList({ customers, chats }: Props) {
                     <div className="flex flex-col mt-4">
                         <h1 className="fond-bold text-center text-slate-400 text-[18px]">Customers</h1>
                         {customers?.map((customer) => (
-                            <Customer key={customer?.id} customer={customer} />
+                            <Suspense key={customer?.id} fallback={<LoadingChatHeader />}>
+                                <Customer customer={customer} />
+                            </Suspense>
                         ))}
                     </div>
                 }

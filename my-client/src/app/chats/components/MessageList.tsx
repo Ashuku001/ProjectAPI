@@ -38,7 +38,6 @@ function MessageList({ id }: Props) {
           }
 
           const newMessage = subscriptionData.data.messageAdded?.message
-          // console.log("NEW MESSAGE IN PAGE", newMessage)
           if (newMessage) {
             if (!prev?.chat?.messages.find((msg) => msg?.id === newMessage?.id)) {
               return Object.assign({}, prev, {

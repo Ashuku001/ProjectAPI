@@ -12,6 +12,7 @@ import {
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { setContext } from '@apollo/client/link/context'
 import { isLoggedInVar, merchantId } from "@/app/cache/cache";
+import secureLocalStorage from "react-secure-storage";
 
 
 // client schema
