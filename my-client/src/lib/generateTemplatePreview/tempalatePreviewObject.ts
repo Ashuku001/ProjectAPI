@@ -1,4 +1,4 @@
-import { PrevContent, PreviewObj, RemoteTemplateObj } from "../../../types"
+import { PrevContent, PreviewObj, RemoteTemplateObj, StaticButton } from "../../../types"
 
 interface InputElement {
   type: string;
@@ -56,7 +56,7 @@ export const templatePreviewObj = (template: RemoteTemplateObj) => {
 
     if (component.type === "BUTTONS") {
       let content: PrevContent = {}
-      content.static = component.buttons
+      content.buttons = component?.buttons
       previewUI.BUTTONS = content
     }
   })

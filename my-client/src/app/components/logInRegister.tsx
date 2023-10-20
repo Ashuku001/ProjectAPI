@@ -1,5 +1,5 @@
 'use client'
-import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { LoginMerchantDocument, SignupMerchantDocument } from '../../../__gql__/graphql';
 import { useMutation } from '@apollo/client';
 import ErrorComponent from './ErrorComponent';
@@ -40,6 +40,13 @@ const LoginForm = () => {
         setPassword('')
     }
 
+    const onKeyDown = (e: KeyboardEvent) => {
+        if(e.code === 'Space')
+            e.preventDefault()
+        
+    }
+
+
     return (
         <div className=''>
             <div className='flex flex-col w-[300px]'>
@@ -48,7 +55,9 @@ const LoginForm = () => {
                         <input
                             type="text"
                             placeholder='username'
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) =>{
+                                 setUsername(e.target.value)
+                                }}
                             className='p-2 rounded-md'
                         />
                         <input

@@ -115,22 +115,28 @@ interface PreviewObj {
 interface PrevContent {
     static?: StaticInput;
     dynamic?: DynamicContent
+    buttons?: StaticButton
 }
 
-interface StaticContet {
+interface StaticContent {
     [key: string]: any
 }
 
 interface StaticInput {
     type?: string;
     format?: string;
-    content?: StaticContet;
+    content?: StaticContent;
+}
+
+interface StaticButton {
+    type: string;
+    [key: string]: any
 }
 
 interface DynamicContent {
     type?: string;
     format?: string;
-    content?: StaticContet;
+    content?: StaticContent;
     inputs?: InputElement[]
 }
 

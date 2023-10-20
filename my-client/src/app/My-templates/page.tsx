@@ -1,13 +1,9 @@
 'use client'
 import { listTemplates } from '@/lib/message-helper/getRemoteTemplates'
-import Image from 'next/image'
 import { useQuery } from '@apollo/client'
 import { GetSettingDocument } from '../../../__gql__/graphql'
 import { useEffect, useState } from 'react'
-import { ComponentObj, PreviewObj, RemoteTemplateObj, SettingType } from '../../../types'
-import Input from 'postcss/lib/input'
-import { templatePreviewObj } from '@/lib/generateTemplatePreview/tempalatePreviewObject'
-import { templatePreviewUI } from '@/lib/generateTemplatePreview/templatePreviewUI'
+import { RemoteTemplateObj, SettingType } from '../../../types'
 import Template from './components/Template'
 
 function MyTemplates(request: Request) {
@@ -42,7 +38,7 @@ function MyTemplates(request: Request) {
       return
     }
     getTemplates()
-  }, [loading])
+  }, [loading, setting])
 
 
   return (
